@@ -19,6 +19,8 @@ model Dealer {
   updatedAt DateTime @default(now())
   users     User[]
   car     Car[]
+  deal Deal[]
+
 }
 
 model User {
@@ -30,6 +32,7 @@ model User {
   dealer    Dealer   @relation(fields: [dealerId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
+  deal Deal[]
 
 }
 
@@ -38,17 +41,95 @@ model Car {
   make      String
   model     String
   year      Int
-  description String
+  description String?
   registration String
   price     Int
   dealerId  String
-  buyInDate DateTime @default(now())
   dealer    Dealer   @relation(fields: [dealerId], references: [id])
+  buyInDate DateTime @default(now())
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
+  status    CarStatus @default(DUEIN)
+  deal Deal[]
+
+}
+
+model Deal {
+  id             String        @id @default(uuid())
+
+  // Relations
+  carId          String
+  car            Car           @relation(fields: [carId], references: [id])
+
+  customerId     String
+  customer       Customer      @relation(fields: [customerId], references: [id])
+
+  dealerId       String
+  dealer         Dealer        @relation(fields: [dealerId], references: [id])
+
+  salespersonId  String
+  salesperson    User          @relation(fields: [salespersonId], references: [id])
+
+  // Deal info
+  agreedPrice    Int
+  status         DealStatus
+  pickupDate     DateTime?
+  dealDate       DateTime
+  deposit        Int
+  balance        Int
+
+  // Finance
+  finance        Boolean       @default(false)
+  financeStatus  FinanceStatus?
+  financeAmount  Int?
+
+  // Metadata
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  @@index([dealerId])
+  @@index([carId])
+  @@index([customerId])
+}
+
+model Customer {
+  id        String   @id @default(uuid())
+
+  name      String
+  phone     String
+  email     String
+
+  deals     Deal[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum Role {
   ADMIN
-  SALESMAN
+  SALESPERSON
+}
+
+enum DealStatus {
+  PENDING
+  Declined
+  AGREED
+  CANCELLED
+  COMPLETED
+}
+
+enum FinanceStatus {
+  NOT_APPLIED
+  AWAITING_APPROVAL
+  APPROVED
+  PENDING
+  AWAITING_PAYMENT
+  PAID
+}
+
+enum CarStatus{
+  DUEIN
+  INPREP
+  ONSALE
+  SOLD
 }

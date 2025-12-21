@@ -66,6 +66,7 @@ router.post("/", async (req, res) => {
         error: "Dealer not found",
       });
     }
+    // Check if the car is already in db, with the current dealer and active status
 
     const car = await prisma.car.create({
       data: {
