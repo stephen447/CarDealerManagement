@@ -10,11 +10,13 @@ server.use(express.urlencoded({ extended: true }));
 // Import routes
 import dealerRoutes from "./Dealer/Dealer/route.js";
 import carRoutes from "./Car/Car/route.js";
+import customerRoutes from "./Dealer/Customer/route.js";
 // import salesPersonRoutes from "./Dealer/SalesPerson/route.js";
 
 // Mount routes
 server.use("/api/v1/dealer", dealerRoutes);
 server.use("/api/v1/car", carRoutes);
+server.use("/api/v1/customer", customerRoutes);
 // server.use("/api/salesperson", salesPersonRoutes);
 
 // Health check endpoint
