@@ -8,12 +8,12 @@ server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
 
 // Import routes
-// import dealerRoutes from "./Dealer/Dealer/route.js";
+import dealerRoutes from "./Dealer/Dealer/route.js";
 import carRoutes from "./Car/Car/route.js";
 // import salesPersonRoutes from "./Dealer/SalesPerson/route.js";
 
 // Mount routes
-// server.use("/api/dealer", dealerRoutes);
+server.use("/api/v1/dealer", dealerRoutes);
 server.use("/api/v1/car", carRoutes);
 // server.use("/api/salesperson", salesPersonRoutes);
 
