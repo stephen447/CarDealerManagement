@@ -61,8 +61,8 @@ model Deal {
   carId          String
   car            Car           @relation(fields: [carId], references: [id])
 
-  customerId     String
-  customer       Customer      @relation(fields: [customerId], references: [id])
+  // customerId     String
+  // customer       Customer      @relation(fields: [customerId], references: [id])
 
   dealerId       String
   dealer         Dealer        @relation(fields: [dealerId], references: [id])
@@ -87,19 +87,23 @@ model Deal {
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
 
+  // Customer
+  customerName   String
+  customerEmail  String
+  customerNumber String
+
   @@index([dealerId])
   @@index([carId])
-  @@index([customerId])
+  //@@index([customerId])
 }
 
+//Redundant for the minute
 model Customer {
   id        String   @id @default(uuid())
 
   name      String
   phone     String
   email     String
-
-  deals     Deal[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
