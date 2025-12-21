@@ -92,4 +92,59 @@ router.post("/", async (req, res) => {
   }
 });
 
+// GET /api/v1/car - Get all cars
+router.get("/", async (req, res) => {
+  try {
+    const cars = await prisma.car.findMany();
+    res.json(cars);
+  } catch (error) {
+    console.error("Error getting cars:", error);
+  }
+});
+
+// GET /api/v1/car/:id - Get a car by id
+router.get("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!id) {
+      return res.status(400).json({ error: "Car ID is required" });
+    }
+    const car = await prisma.car.findUnique({ where: { id } });
+    res.json(car);
+  } catch (error) {
+    console.error("Error getting car:", error);
+  }
+});
+
+// PUT /api/v1/car/:id - Update a car by id
+router.put("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!id) {
+      return res.status(400).json({ error: "Car ID is required" });
+    }
+    // Allow partial updates
+    const car = await prisma.car.update({ where: { id }, data: req.body });
+    res.json(car);
+  } catch (error) {
+    console.error("Error updating car:", error.message);
+    res
+      .status(500)
+      .json({ error: "Failed to update car", message: error.message });
+  }
+});
+
+// DELETE /api/v1/car/:id - Delete a car by id
+router.delete("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!id) {
+      return res.status(400).json({ error: "Car ID is required" });
+    }
+    const car = await prisma.car.delete({ where: { id } });
+    res.json(car);
+  } catch (error) {
+    console.error("Error deleting car:", error);
+  }
+});
 export default router;
