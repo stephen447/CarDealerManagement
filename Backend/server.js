@@ -12,12 +12,14 @@ import dealerRoutes from "./Dealer/Dealer/route.js";
 import carRoutes from "./Car/Car/route.js";
 import customerRoutes from "./Dealer/Customer/route.js";
 import userRoutes from "./Dealer/User/route.js";
+import dealRoutes from "./Car/Deal/route.js";
 
 // Mount routes
 server.use("/api/v1/dealer", dealerRoutes);
 server.use("/api/v1/car", carRoutes);
 server.use("/api/v1/customer", customerRoutes);
 server.use("/api/v1/user", userRoutes);
+server.use("/api/v1/deal", dealRoutes);
 
 // Health check endpoint
 server.get("/api/v1/health", (req, res) => {
