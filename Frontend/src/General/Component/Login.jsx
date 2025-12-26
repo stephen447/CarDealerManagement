@@ -1,11 +1,15 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "./Login.module.css";
 
-function Login() {
+function Login({ userType }) {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+
+  const navigate = useNavigate();
+
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -22,7 +26,7 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    setLoading(true);
+    // setLoading(true);
 
     // Basic validation
     if (!formData.email || !formData.password) {
@@ -31,30 +35,32 @@ function Login() {
       return;
     }
 
-    try {
-      // TODO: Replace with actual API endpoint
-      const response = await fetch("http://localhost:3000/api/v1/user/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+    // try {
+    //   // TODO: Replace with actual API endpoint
+    //   const response = await fetch("http://localhost:3000/api/v1/user/login", {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify(formData),
+    //   });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Login failed");
-      }
+    //   if (!response.ok) {
+    //     const errorData = await response.json();
+    //     throw new Error(errorData.error || "Login failed");
+    //   }
 
-      const data = await response.json();
-      // TODO: Handle successful login (store token, redirect, etc.)
-      console.log("Login successful:", data);
-      alert("Login successful!");
-    } catch (err) {
-      setError(err.message || "An error occurred during login");
-    } finally {
-      setLoading(false);
-    }
+    //   const data = await response.json();
+    //   // TODO: Handle successful login (store token, redirect, etc.)
+    //   console.log("Login successful:", data);
+    //   alert("Login successful!");
+    // } catch (err) {
+    //   setError(err.message || "An error occurred during login");
+    // } finally {
+    //   setLoading(false);
+    // }
+    // Redirect to a different page (temporary solution)
+    navigate(`/${userType}`);
   };
 
   return (
