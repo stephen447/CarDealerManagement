@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import Login from "../General/Component/Login/Login";
-import CreateSalesPersonPage from "./Pages/CreateSalesPersonPage";
+import CreateSalesPersonPage from "./Pages/CreateSalesPersonPage/CreateSalesPersonPage";
 
 function DealerApp() {
   return (
