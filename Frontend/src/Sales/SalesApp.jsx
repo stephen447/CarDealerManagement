@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom";
-import Login from "../General/Component/Login";
+import Login from "../General/Component/Login/Login";
 
 function SalesApp() {
   return (

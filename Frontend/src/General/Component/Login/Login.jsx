@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./Login.module.css";
+import TextInput from "../TextInput/TextInput";
 
 function Login({ userType }) {
   const [formData, setFormData] = useState({
@@ -12,16 +13,6 @@ function Login({ userType }) {
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-    // Clear error when user starts typing
-    if (error) setError("");
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -72,33 +63,21 @@ function Login({ userType }) {
         {error && <div className={styles["error-message"]}>{error}</div>}
 
         <form onSubmit={handleSubmit} className={styles["login-form"]}>
-          <div className={styles["form-group"]}>
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="Enter your email"
-              required
-              disabled={loading}
-            />
-          </div>
+          <TextInput
+            label="Email"
+            name="email"
+            type="email"
+            formData={formData}
+            setFormData={setFormData}
+          />
 
-          <div className={styles["form-group"]}>
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Enter your password"
-              required
-              disabled={loading}
-            />
-          </div>
+          <TextInput
+            label="Password"
+            name="password"
+            type="password"
+            formData={formData}
+            setFormData={setFormData}
+          />
 
           <button
             type="submit"
