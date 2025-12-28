@@ -1,0 +1,12 @@
+.list-item {
+  padding: 1rem;
+  border-radius: var(--border-radius-small);
+  border: none;
+  background-color: var(--color-background-secondary);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+}
+
+.list-item:hover {
+  background-color: var(--color-background-primary-hover);
+}
