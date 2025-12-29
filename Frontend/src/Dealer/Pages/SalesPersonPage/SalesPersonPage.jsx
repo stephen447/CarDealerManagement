@@ -1,37 +1,82 @@
 import Header from "../../Components/Header";
+import { useParams } from "react-router-dom";
+import { useState } from "react";
+import { useEffect } from "react";
 import styles from "./SalesPersonPage.module.css";
-import SidebarNav from "../../../General/SideBarNav/SideBarNav";
-import ListItem from "../../../General/Component/ListItem/ListItem";
+import TextInput from "../../../General/Component/TextInput/TextInput";
 
-function SalespersonPage() {
-  const testData = [
-    { name: "Stephen Byrne", id: 1 },
-    { name: "John Doe", id: 2 },
-  ];
+function SalesPersonPage() {
+  const { id } = useParams();
+  const [salesPerson, setSalesPerson] = useState(null);
+  const [tempSalesPerson, setTempSalesPerson] = useState(null);
+  const [editMode, setEditMode] = useState(false);
+
+  // fetch sales person data on load
+  useEffect(() => {
+    // ToDo Fetch from the db
+
+    setSalesPerson({
+      name: "Stephen Byrne",
+      email: "stephen.byrne@caradverts.com",
+    });
+    setTempSalesPerson({
+      name: "Stephen Byrne",
+      email: "stephen.byrne@caradverts.com",
+    });
+  }, [id]);
+
+  const handleSave = () => {
+    // ToDo Save to the db
+    setSalesPerson(tempSalesPerson);
+    setEditMode(false);
+  };
+
+  const handleCancel = () => {
+    setEditMode(false);
+    setTempSalesPerson(salesPerson);
+  };
 
   return (
-    <div style={{ height: "100vh" }}>
+    <div>
       <Header />
-
-      <main className={styles["page-container"]}>
-        <SidebarNav
-          items={[
-            { label: "Sales People", path: "/dealer/salesPerson" },
-            { label: "Create Sale Person", path: "/dealer/createSalesPerson" },
-          ]}
-        />
-        <div className={styles["main-container"]}>
-          {testData.map((item) => (
-            <ListItem
-              key={item.id}
-              title={item.name}
-              url={`/dealer/salesPerson/${item.id}`}
-            />
-          ))}
-        </div>
+      <main>
+        {salesPerson !== null ? (
+          editMode ? (
+            <div className={styles["main-container"]}>
+              <TextInput
+                label="Name"
+                name="name"
+                type="text"
+                formData={tempSalesPerson}
+                setFormData={setTempSalesPerson}
+              />
+              <TextInput
+                label="Email"
+                name="email"
+                type="email"
+                formData={tempSalesPerson}
+                setFormData={setTempSalesPerson}
+              />
+              <div className={styles["button-container"]}>
+                <button onClick={() => handleCancel()}>Cancel</button>
+                <button onClick={() => handleSave()}>Save</button>
+              </div>
+            </div>
+          ) : (
+            <div className={styles["main-container"]}>
+              <p>Name: {salesPerson.name}</p>
+              <p>Email: {salesPerson.email}</p>
+              <div className={styles["button-container"]}>
+                <button onClick={() => setEditMode(true)}>Edit</button>
+              </div>
+            </div>
+          )
+        ) : (
+          <h1 className={styles["loading"]}>Loading...</h1>
+        )}
       </main>
     </div>
   );
 }
 
-export default SalespersonPage;
+export default SalesPersonPage;

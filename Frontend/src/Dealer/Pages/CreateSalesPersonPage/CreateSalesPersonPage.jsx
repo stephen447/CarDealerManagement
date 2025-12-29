@@ -32,7 +32,7 @@ function CreateSalesPersonPage() {
       <main className={styles["page-container"]}>
         <SidebarNav
           items={[
-            { label: "Sales People", path: "/dealer/salesPerson" },
+            { label: "Sales People", path: "/dealer/salesPersonList" },
             { label: "Create Sale Person", path: "/dealer/createSalesPerson" },
           ]}
         />

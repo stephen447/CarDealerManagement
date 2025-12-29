@@ -8,7 +8,7 @@ const Header = () => {
     <header>
       <nav>
         <button onClick={() => navigate("/")}>Home</button>
-        <button onClick={() => navigate("/dealer/createSalesPerson")}>
+        <button onClick={() => navigate("/dealer/salesPersonList")}>
           SalesPeople
         </button>
         <button onClick={() => navigate("/stock")}>Stock</button>

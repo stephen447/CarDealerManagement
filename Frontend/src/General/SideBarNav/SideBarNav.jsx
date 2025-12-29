@@ -4,7 +4,6 @@ import styles from "./SideBarNav.module.css";
 
 const SidebarNav = ({ items }) => {
   const location = useLocation();
-  console.log("Location", location);
   const activePath = location.pathname;
 
   return (
