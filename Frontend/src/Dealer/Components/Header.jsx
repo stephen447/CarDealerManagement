@@ -7,12 +7,12 @@ const Header = () => {
   return (
     <header>
       <nav>
-        <button onClick={() => navigate("/")}>Home</button>
+        <button onClick={() => navigate("/dealer/home")}>Home</button>
         <button onClick={() => navigate("/dealer/salesPersonList")}>
           SalesPeople
         </button>
-        <button onClick={() => navigate("/stock")}>Stock</button>
-        <button onClick={() => navigate("/deals")}>Deals</button>
+        <button onClick={() => navigate("/dealer/stock")}>Stock</button>
+        <button onClick={() => navigate("/dealer/deals")}>Deals</button>
         <button onClick={() => navigate("/settings")}>Settings</button>
       </nav>
     </header>
