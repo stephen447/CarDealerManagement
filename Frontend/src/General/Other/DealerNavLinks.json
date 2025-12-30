@@ -2,5 +2,9 @@
   "salesPeople": [
     { "label": "Sales People", "path": "/dealer/salesPersonList" },
     { "label": "Create Sale Person", "path": "/dealer/createSalesPerson" }
+  ],
+  "stock": [
+    { "label": "Stock", "path": "/dealer/stock" },
+    { "label": "Create Stock", "path": "/dealer/createStock" }
   ]
 }

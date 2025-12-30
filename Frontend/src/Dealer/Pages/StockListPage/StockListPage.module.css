@@ -1,0 +1,15 @@
+.page-container {
+  display: flex;
+  height: 93%;
+}
+
+.page-content {
+  display: flex;
+  flex-direction: column;
+  max-width: 420px;
+  align-items: center;
+  margin: 2rem auto;
+  width: 100%;
+  overflow-y: scroll;
+  gap: 1rem;
+}

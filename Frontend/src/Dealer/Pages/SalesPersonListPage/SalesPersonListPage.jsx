@@ -1,4 +1,4 @@
-import Header from "../../Components/Header";
+import Header from "../../Components/Header/Header";
 import styles from "./SalesPersonListPage.module.css";
 import SidebarNav from "../../../General/SideBarNav/SideBarNav";
 import ListItem from "../../../General/Component/ListItem/ListItem";
@@ -9,7 +9,6 @@ function SalespersonPage() {
     { name: "Stephen Byrne", id: 1 },
     { name: "John Doe", id: 2 },
   ];
-  console.log("DealerNavLinks", DealerNavLinks);
   const navItems = DealerNavLinks.salesPeople;
 
   return (

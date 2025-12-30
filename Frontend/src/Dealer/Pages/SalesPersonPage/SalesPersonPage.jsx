@@ -1,4 +1,4 @@
-import Header from "../../Components/Header";
+import Header from "../../Components/Header/Header";
 import { useParams } from "react-router-dom";
 import { useState } from "react";
 import { useEffect } from "react";

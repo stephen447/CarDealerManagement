@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Header from "../../Components/Header";
+import Header from "../../Components/Header/Header";
 import styles from "./CreateSalesPersonPage.module.css";
 import TextInput from "../../../General/Component/TextInput/TextInput";
 import SidebarNav from "../../../General/SideBarNav/SideBarNav";

@@ -1,0 +1,22 @@
+.column {
+  display: flex;
+  gap: 1rem;
+}
+
+.stock-list-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-radius: var(--border-radius-small);
+  border: none;
+  background-color: var(--color-background-primary);
+  color: var(--color-text-primary);
+  width: 100%;
+}
+
+.stock-list-item:hover {
+  cursor: pointer;
+  background-color: var(--color-background-primary-hover);
+}
