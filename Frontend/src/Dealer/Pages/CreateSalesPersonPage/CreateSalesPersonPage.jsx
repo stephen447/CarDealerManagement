@@ -3,6 +3,7 @@ import Header from "../../Components/Header";
 import styles from "./CreateSalesPersonPage.module.css";
 import TextInput from "../../../General/Component/TextInput/TextInput";
 import SidebarNav from "../../../General/SideBarNav/SideBarNav";
+import DealerNavLinks from "../../../General/Other/DealerNavLinks";
 
 function CreateSalesPersonPage() {
   const [formData, setFormData] = useState({
@@ -10,6 +11,7 @@ function CreateSalesPersonPage() {
     email: "",
     password: "",
   });
+  const navItems = DealerNavLinks.salesPeople;
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -30,12 +32,7 @@ function CreateSalesPersonPage() {
       <Header />
 
       <main className={styles["page-container"]}>
-        <SidebarNav
-          items={[
-            { label: "Sales People", path: "/dealer/salesPersonList" },
-            { label: "Create Sale Person", path: "/dealer/createSalesPerson" },
-          ]}
-        />
+        <SidebarNav items={navItems} />
         <div className={styles["main-container"]}>
           <h1>Create Sales Person</h1>
           <form className={styles["salesperson-form"]} onSubmit={handleSubmit}>

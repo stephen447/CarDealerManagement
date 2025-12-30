@@ -1,0 +1,6 @@
+{
+  "salesPeople": [
+    { "label": "Sales People", "path": "/dealer/salesPersonList" },
+    { "label": "Create Sale Person", "path": "/dealer/createSalesPerson" }
+  ]
+}
