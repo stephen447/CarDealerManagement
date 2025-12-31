@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./Login.module.css";
+import generalStyles from "../../Other/GeneralStyles.module.css";
 import TextInput from "../TextInput/TextInput";
 
 function Login({ userType }) {
@@ -51,7 +52,7 @@ function Login({ userType }) {
     //   setLoading(false);
     // }
     // Redirect to a different page (temporary solution)
-    navigate(`/${userType}`);
+    navigate(`/${userType}/home`);
   };
 
   return (
@@ -81,7 +82,7 @@ function Login({ userType }) {
 
           <button
             type="submit"
-            className={styles["login-button"]}
+            className={generalStyles["button-primary"]}
             disabled={loading}
           >
             {loading ? "Signing in..." : "Sign In"}

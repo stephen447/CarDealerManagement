@@ -4,3 +4,7 @@ export function formatNumberToPrice(value) {
     currency: "EUR",
   }).format(value);
 }
+
+export function formatDateString(dateString) {
+  return new Date(dateString).toLocaleDateString("en-IE");
+}

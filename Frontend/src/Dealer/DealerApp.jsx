@@ -5,6 +5,7 @@ import SalesPersonListPage from "./Pages/SalesPersonListPage/SalesPersonListPage
 import SalesPersonPage from "./Pages/SalesPersonPage/SalesPersonPage";
 import HomePage from "./Pages/HomePage/HomePage";
 import StockListPage from "./Pages/StockListPage/StockListPage";
+import StockPage from "./Pages/StockPage/StockPage";
 
 function DealerApp() {
   return (
@@ -15,6 +16,7 @@ function DealerApp() {
       <Route path="salesPersonList" element={<SalesPersonListPage />} />
       <Route path="salesPerson/:id" element={<SalesPersonPage />} />
       <Route path="stock" element={<StockListPage />} />
+      <Route path="stock/:id" element={<StockPage />} />
     </Routes>
   );
 }

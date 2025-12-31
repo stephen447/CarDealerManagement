@@ -1,0 +1,17 @@
+.button-primary {
+  margin-top: 0.75rem;
+  padding: 0.6rem;
+  border: none;
+  background-color: var(--color-background-secondary);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  padding: 0.6rem;
+  border-radius: var(--border-radius-small);
+  min-width: 95px;
+  max-width: 240px;
+  width: 100%;
+}
+.button-primary:hover {
+  background-color: var(--color-background-secondary-hover);
+  color: var(--color-text-secondary-hover);
+}

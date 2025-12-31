@@ -1,21 +1,20 @@
-.text-input label {
+.select-input label {
   display: flex;
   flex-direction: column;
   color: var(--color-text-primary);
   gap: 0.35rem;
 }
 
-.text-input input {
+.select-input input {
   padding: 0.5rem 0.6rem;
   border-radius: var(--border-radius-small);
   background-color: var(--color-gray-200);
   border: none;
 }
 
-.text-input input:focus {
+.select-input input:focus {
   outline: none;
 }
-.text-input {
+.select-input {
   max-width: 420px;
-  width: 100%;
 }

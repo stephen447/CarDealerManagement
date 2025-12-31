@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { useState } from "react";
 import { useEffect } from "react";
 import styles from "./SalesPersonPage.module.css";
+import generalStyles from "../../../General/Other/GeneralStyles.module.css";
 import TextInput from "../../../General/Component/TextInput/TextInput";
 
 function SalesPersonPage() {
@@ -58,8 +59,18 @@ function SalesPersonPage() {
                 setFormData={setTempSalesPerson}
               />
               <div className={styles["button-container"]}>
-                <button onClick={() => handleCancel()}>Cancel</button>
-                <button onClick={() => handleSave()}>Save</button>
+                <button
+                  onClick={() => handleCancel()}
+                  className={generalStyles["button-primary"]}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => handleSave()}
+                  className={generalStyles["button-primary"]}
+                >
+                  Save
+                </button>
               </div>
             </div>
           ) : (
@@ -67,7 +78,12 @@ function SalesPersonPage() {
               <p>Name: {salesPerson.name}</p>
               <p>Email: {salesPerson.email}</p>
               <div className={styles["button-container"]}>
-                <button onClick={() => setEditMode(true)}>Edit</button>
+                <button
+                  onClick={() => setEditMode(true)}
+                  className={generalStyles["button-primary"]}
+                >
+                  Edit
+                </button>
               </div>
             </div>
           )

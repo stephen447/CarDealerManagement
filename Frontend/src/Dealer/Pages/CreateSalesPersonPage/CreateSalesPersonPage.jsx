@@ -4,6 +4,7 @@ import styles from "./CreateSalesPersonPage.module.css";
 import TextInput from "../../../General/Component/TextInput/TextInput";
 import SidebarNav from "../../../General/SideBarNav/SideBarNav";
 import DealerNavLinks from "../../../General/Other/DealerNavLinks";
+import generalStyles from "../../../General/Other/GeneralStyles.module.css";
 
 function CreateSalesPersonPage() {
   const [formData, setFormData] = useState({
@@ -58,7 +59,9 @@ function CreateSalesPersonPage() {
               setFormData={setFormData}
             />
 
-            <button type="submit">Create Sales Person</button>
+            <button type="submit" className={generalStyles["button-primary"]}>
+              Create Sales Person
+            </button>
           </form>
         </div>
       </main>
