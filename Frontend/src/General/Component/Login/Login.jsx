@@ -63,7 +63,7 @@ function Login({ userType }) {
 
         {error && <div className={styles["error-message"]}>{error}</div>}
 
-        <form onSubmit={handleSubmit} className={styles["login-form"]}>
+        <form onSubmit={handleSubmit} className={generalStyles["form"]}>
           <TextInput
             label="Email"
             name="email"

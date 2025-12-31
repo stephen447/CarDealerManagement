@@ -36,7 +36,7 @@ function CreateSalesPersonPage() {
         <SidebarNav items={navItems} />
         <div className={styles["main-container"]}>
           <h1>Create Sales Person</h1>
-          <form className={styles["salesperson-form"]} onSubmit={handleSubmit}>
+          <form className={generalStyles["form"]} onSubmit={handleSubmit}>
             <TextInput
               label={"Name"}
               name="name"
