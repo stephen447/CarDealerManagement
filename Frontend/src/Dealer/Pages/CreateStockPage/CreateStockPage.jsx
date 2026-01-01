@@ -5,7 +5,7 @@ import TextInput from "../../../General/Component/TextInput/TextInput";
 import SelectInput from "../../../General/Component/SelectInput/SelectInput";
 import { useState } from "react";
 import generalStyles from "../../../General/Other/GeneralStyles.module.css";
-import styles from "./CreateStockPage.module.css";
+// import styles from "./CreateStockPage.module.css";
 
 function CreateStockPage() {
   const [formData, setFormData] = useState({
@@ -45,7 +45,7 @@ function CreateStockPage() {
   return (
     <div style={{ height: "100vh" }}>
       <Header />
-      <main className={styles["page-container"]}>
+      <main className={generalStyles["main-container"]}>
         <SidebarNav items={DealerNavLinks.stock} />
         <div className={generalStyles["content-container"]}>
           <h1>Create Stock</h1>

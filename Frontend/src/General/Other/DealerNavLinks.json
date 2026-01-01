@@ -6,5 +6,6 @@
   "stock": [
     { "label": "Stock", "path": "/dealer/stock" },
     { "label": "Create Stock", "path": "/dealer/createStock" }
-  ]
+  ],
+  "deals": [{ "label": "Deals", "path": "/dealer/deals" }]
 }

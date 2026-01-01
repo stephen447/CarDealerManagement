@@ -1,5 +1,5 @@
 import Header from "../../Components/Header/Header";
-import styles from "./SalesPersonListPage.module.css";
+import generalStyles from "../../../General/Other/GeneralStyles.module.css";
 import SidebarNav from "../../../General/SideBarNav/SideBarNav";
 import ListItem from "../../../General/Component/ListItem/ListItem";
 import DealerNavLinks from "../../../General/Other/DealerNavLinks";
@@ -15,9 +15,10 @@ function SalespersonPage() {
     <div style={{ height: "100vh" }}>
       <Header />
 
-      <main className={styles["page-container"]}>
+      <main className={generalStyles["main-container"]}>
         <SidebarNav items={navItems} />
-        <div className={styles["main-container"]}>
+        <div className={generalStyles["content-container"]}>
+          <h1>Sales People</h1>
           {testData.map((item) => (
             <ListItem
               key={item.id}

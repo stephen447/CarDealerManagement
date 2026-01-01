@@ -40,10 +40,10 @@ function SalesPersonPage() {
   return (
     <div>
       <Header />
-      <main>
+      <main className={generalStyles["main-container"]}>
         {salesPerson !== null ? (
           editMode ? (
-            <div className={styles["main-container"]}>
+            <div className={generalStyles["content-container"]}>
               <TextInput
                 label="Name"
                 name="name"
@@ -74,7 +74,7 @@ function SalesPersonPage() {
               </div>
             </div>
           ) : (
-            <div className={styles["main-container"]}>
+            <div className={generalStyles["content-container"]}>
               <p>Name: {salesPerson.name}</p>
               <p>Email: {salesPerson.email}</p>
               <div className={styles["button-container"]}>

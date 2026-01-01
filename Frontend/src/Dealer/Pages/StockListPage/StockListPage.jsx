@@ -1,8 +1,8 @@
 import Header from "../../Components/Header/Header";
 import SidebarNav from "../../../General/SideBarNav/SideBarNav";
 import DealerNavLinks from "../../../General/Other/DealerNavLinks";
-import styles from "./StockListPage.module.css";
 import StockListItem from "../../Components/StockListItem/StockListItem";
+import generalStyles from "../../../General/Other/GeneralStyles.module.css";
 
 function StockListPage() {
   const navLinks = DealerNavLinks.stock;
@@ -42,9 +42,9 @@ id        String   @id @default(uuid())
   return (
     <div style={{ height: "100vh" }}>
       <Header />
-      <main className={styles["page-container"]}>
+      <main className={generalStyles["main-container"]}>
         <SidebarNav items={navLinks} />
-        <div className={styles["page-content"]}>
+        <div className={generalStyles["content-container"]}>
           <h1>Stock List</h1>
           {testData.map((item) => (
             <StockListItem item={item} />

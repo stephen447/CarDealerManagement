@@ -1,5 +1,5 @@
 import Header from "../../Components/Header/Header";
-import { useParams } from "react-router-dom";
+// import { useParams } from "react-router-dom";
 import { formatNumberToPrice } from "../../../General/Other/GeneralFunctions";
 import styles from "./StockPage.module.css";
 import generalStyles from "../../../General/Other/GeneralStyles.module.css";
@@ -9,7 +9,7 @@ import TextInput from "../../../General/Component/TextInput/TextInput";
 import SelectInput from "../../../General/Component/SelectInput/SelectInput";
 
 function StockPage() {
-  const { id } = useParams();
+  //   const { id } = useParams();
   const dealer = true;
   const [editMode, setEditMode] = useState(false);
   // Will get from datastore in future

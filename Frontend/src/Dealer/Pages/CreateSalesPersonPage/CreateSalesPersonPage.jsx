@@ -1,6 +1,5 @@
 import { useState } from "react";
 import Header from "../../Components/Header/Header";
-import styles from "./CreateSalesPersonPage.module.css";
 import TextInput from "../../../General/Component/TextInput/TextInput";
 import SidebarNav from "../../../General/SideBarNav/SideBarNav";
 import DealerNavLinks from "../../../General/Other/DealerNavLinks";
@@ -31,10 +30,9 @@ function CreateSalesPersonPage() {
   return (
     <div style={{ height: "100vh" }}>
       <Header />
-
-      <main className={styles["page-container"]}>
+      <main className={generalStyles["main-container"]}>
         <SidebarNav items={navItems} />
-        <div className={styles["main-container"]}>
+        <div className={generalStyles["content-container"]}>
           <h1>Create Sales Person</h1>
           <form className={generalStyles["form"]} onSubmit={handleSubmit}>
             <TextInput

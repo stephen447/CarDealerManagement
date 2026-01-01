@@ -1,0 +1,11 @@
+.deal-list-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.deal-list-item-row {
+  display: flex;
+  gap: 0.5rem;
+}

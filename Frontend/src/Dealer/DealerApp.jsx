@@ -7,6 +7,7 @@ import HomePage from "./Pages/HomePage/HomePage";
 import StockListPage from "./Pages/StockListPage/StockListPage";
 import StockPage from "./Pages/StockPage/StockPage";
 import CreateStockPage from "./Pages/CreateStockPage/CreateStockPage";
+import DealsListPage from "./Pages/DealsListPage/DealsListPage";
 
 function DealerApp() {
   // ToDo Get data from API and store here locally - options for dropsdowns - makes, models, statuses, stockdata [Page1], save the dealer ID,
@@ -20,6 +21,7 @@ function DealerApp() {
       <Route path="stock" element={<StockListPage />} />
       <Route path="stock/:id" element={<StockPage />} />
       <Route path="createStock" element={<CreateStockPage />} />
+      <Route path="deals" element={<DealsListPage />} />
     </Routes>
   );
 }
