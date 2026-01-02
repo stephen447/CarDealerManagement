@@ -1,7 +1,6 @@
 import Header from "../../Components/Header/Header";
 import SidebarNav from "../../../General/SideBarNav/SideBarNav";
 import DealerNavLinks from "../../../General/Other/DealerNavLinks.json";
-import styles from "./DealsListPage.module.css";
 import generalStyles from "../../../General/Other/GeneralStyles.module.css";
 import { useState } from "react";
 import DealListItem from "../../Components/DealListItem/DealListItem";
