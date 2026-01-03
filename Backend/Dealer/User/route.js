@@ -6,10 +6,10 @@ const router = express.Router();
 // POST /api/v1/user - Create a new user (salesperson/admin)
 router.post("/", async (req, res) => {
   try {
-    let { email, password, role, dealerId } = req.body;
+    let { firstName, lastName, email, password, role, dealerId } = req.body;
 
     // Validate required fields
-    if (!email || !password || !role || !dealerId) {
+    if (!firstName || !lastName || !email || !password || !role || !dealerId) {
       return res.status(400).json({
         error: "Missing required fields",
         required: ["email", "password", "role", "dealerId"],
@@ -59,6 +59,8 @@ router.post("/", async (req, res) => {
     // NOTE: In production you must hash the password before saving
     const user = await prisma.user.create({
       data: {
+        firstName,
+        lastName,
         email,
         password,
         role,
