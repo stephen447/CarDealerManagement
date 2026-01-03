@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import styles from "./SalesPersonPage.module.css";
 import generalStyles from "../../../General/Other/GeneralStyles.module.css";
 import TextInput from "../../../General/Component/TextInput/TextInput";
+import axiosInstance from "../../../General/Other/AxiosInstance";
 
 function SalesPersonPage() {
   const { id } = useParams();
@@ -15,19 +16,31 @@ function SalesPersonPage() {
   // fetch sales person data on load
   useEffect(() => {
     // ToDo Fetch from the db
+    axiosInstance.get(`/api/v1/user/${id}`).then((response) => {
+      console.log(response.data);
+      setSalesPerson(response.data);
+      setTempSalesPerson(response.data);
+    });
 
-    setSalesPerson({
-      name: "Stephen Byrne",
-      email: "stephen.byrne@caradverts.com",
-    });
-    setTempSalesPerson({
-      name: "Stephen Byrne",
-      email: "stephen.byrne@caradverts.com",
-    });
+    // setSalesPerson({
+    //   name: "Stephen Byrne",
+    //   email: "stephen.byrne@caradverts.com",
+    // });
+    // setTempSalesPerson({
+    //   name: "Stephen Byrne",
+    //   email: "stephen.byrne@caradverts.com",
+    // });
   }, [id]);
 
   const handleSave = () => {
     // ToDo Save to the db
+    axiosInstance
+      .put(`/api/v1/user/${id}`, { email: "sdavvviiiddbyrne@gmail.com" })
+      .then((response) => {
+        console.log(response.data);
+        setSalesPerson(response.data);
+        setEditMode(false);
+      });
     setSalesPerson(tempSalesPerson);
     setEditMode(false);
   };
