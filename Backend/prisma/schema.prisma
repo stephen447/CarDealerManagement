@@ -25,6 +25,8 @@ model Dealer {
 
 model User {
   id        String   @id @default(uuid())
+  firstName String
+  lastName  String
   email     String   @unique
   password  String
   role      Role
@@ -42,16 +44,22 @@ model Car {
   model     String
   year      Int
   description String?
-  registration String
+  registration String?
   price     Int
   dealerId  String
   dealer    Dealer   @relation(fields: [dealerId], references: [id])
   buyInDate DateTime @default(now())
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
-  status    CarStatus @default(DUEIN)
+  condition CarCondition @default(USED)
+  type      CarType @default(RETAIL)
+  status    CarStatus @default(DUE_IN)
+  engineSize Int?
+  engineType String?
+  transmission String?
+  mileage Int?
+  color String?
   deal Deal[]
-
 }
 
 model Deal {
@@ -88,8 +96,9 @@ model Deal {
   updatedAt      DateTime      @updatedAt
 
   // Customer
-  customerName   String
-  customerEmail  String
+  customerFirstName   String
+  customerLastName  String
+  customerEmail String
   customerNumber String
 
   @@index([dealerId])
@@ -101,7 +110,8 @@ model Deal {
 model Customer {
   id        String   @id @default(uuid())
 
-  name      String
+  first_name      String
+  last_name     String
   phone     String
   email     String
 
@@ -132,8 +142,18 @@ enum FinanceStatus {
 }
 
 enum CarStatus{
-  DUEIN
-  INPREP
-  ONSALE
+  DUE_IN
+  IN_PREP
+  ON_SALE
   SOLD
+}
+
+enum CarCondition{
+  NEW
+  USED
+}
+
+enum CarType{
+  RETAIL
+  TRADE
 }
