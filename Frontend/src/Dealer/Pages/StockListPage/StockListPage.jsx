@@ -5,17 +5,30 @@ import StockListItem from "../../Components/StockListItem/StockListItem";
 import generalStyles from "../../../General/Other/GeneralStyles.module.css";
 import { useEffect, useState } from "react";
 import axiosInstance from "../../../General/Other/AxiosInstance";
+import Warning from "../../../General/Component/Warning/Warning";
+import Loader from "../../../General/Component/Loader/Loader";
 
 function StockListPage() {
   const navLinks = DealerNavLinks.stock;
-
   const [stockData, setStockData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [warning, setWarning] = useState("");
 
   useEffect(() => {
-    axiosInstance.get("/api/v1/car").then((response) => {
-      console.log(response.data);
-      setStockData(response.data);
-    });
+    async function apicall() {
+      try {
+        setLoading(true);
+        const response = await axiosInstance.get("/api/v1/car");
+        console.log(response.data);
+        setStockData(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error(error);
+        setWarning("Error fetching stock");
+        setLoading(false);
+      }
+    }
+    apicall();
   }, []);
 
   return (
@@ -25,9 +38,13 @@ function StockListPage() {
         <SidebarNav items={navLinks} />
         <div className={generalStyles["content-container"]}>
           <h1>Stock List</h1>
-          {stockData.map((item) => (
-            <StockListItem item={item} />
-          ))}
+          {loading ? (
+            <Loader />
+          ) : warning ? (
+            <Warning message={warning} />
+          ) : (
+            stockData.map((item) => <StockListItem item={item} />)
+          )}
         </div>
       </main>
     </div>
