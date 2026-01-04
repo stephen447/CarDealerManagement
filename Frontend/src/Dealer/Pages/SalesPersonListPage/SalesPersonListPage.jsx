@@ -32,7 +32,7 @@ function SalespersonPage() {
           {salesPeople.map((item) => (
             <ListItem
               key={item.id}
-              title={item.email}
+              title={item.firstName + " " + item.lastName}
               url={`/dealer/salesPerson/${item.id}`}
             />
           ))}

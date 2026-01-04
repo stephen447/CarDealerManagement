@@ -18,27 +18,30 @@ function SalesPersonPage() {
     // ToDo Fetch from the db
     axiosInstance.get(`/api/v1/user/${id}`).then((response) => {
       console.log(response.data);
-      setSalesPerson(response.data);
-      setTempSalesPerson(response.data);
+      setSalesPerson({
+        firstName: response.data.firstName,
+        lastName: response.data.lastName,
+        email: response.data.email,
+      });
+      setTempSalesPerson({
+        firstName: response.data.firstName,
+        lastName: response.data.lastName,
+        email: response.data.email,
+      });
     });
-
-    // setSalesPerson({
-    //   name: "Stephen Byrne",
-    //   email: "stephen.byrne@caradverts.com",
-    // });
-    // setTempSalesPerson({
-    //   name: "Stephen Byrne",
-    //   email: "stephen.byrne@caradverts.com",
-    // });
   }, [id]);
 
   const handleSave = () => {
     // ToDo Save to the db
     axiosInstance
-      .put(`/api/v1/user/${id}`, { email: "sdavvviiiddbyrne@gmail.com" })
+      .put(`/api/v1/user/${id}`, tempSalesPerson)
       .then((response) => {
         console.log(response.data);
-        setSalesPerson(response.data);
+        setSalesPerson({
+          firstName: response.data.firstName,
+          lastName: response.data.lastName,
+          email: response.data.email,
+        });
         setEditMode(false);
       });
     setSalesPerson(tempSalesPerson);
@@ -58,8 +61,15 @@ function SalesPersonPage() {
           editMode ? (
             <div className={generalStyles["content-container"]}>
               <TextInput
-                label="Name"
-                name="name"
+                label="First Name"
+                name="firstName"
+                type="text"
+                formData={tempSalesPerson}
+                setFormData={setTempSalesPerson}
+              />
+              <TextInput
+                label="Last Name"
+                name="lastName"
                 type="text"
                 formData={tempSalesPerson}
                 setFormData={setTempSalesPerson}
@@ -88,7 +98,8 @@ function SalesPersonPage() {
             </div>
           ) : (
             <div className={generalStyles["content-container"]}>
-              <p>Name: {salesPerson.name}</p>
+              <p>First Name: {salesPerson.firstName}</p>
+              <p>Last Name: {salesPerson.lastName}</p>
               <p>Email: {salesPerson.email}</p>
               <div className={styles["button-container"]}>
                 <button
