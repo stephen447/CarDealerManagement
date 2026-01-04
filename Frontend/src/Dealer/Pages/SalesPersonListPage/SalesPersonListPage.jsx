@@ -5,16 +5,29 @@ import ListItem from "../../../General/Component/ListItem/ListItem";
 import DealerNavLinks from "../../../General/Other/DealerNavLinks";
 import { useEffect, useState } from "react";
 import axiosInstance from "../../../General/Other/AxiosInstance";
+import Loader from "../../../General/Component/Loader/Loader";
+import Warning from "../../../General/Component/Warning/Warning";
 
 function SalespersonPage() {
   const [salesPeople, setSalesPeople] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [warning, setWarning] = useState("");
   const navItems = DealerNavLinks.salesPeople;
 
   useEffect(() => {
-    axiosInstance.get("/api/v1/user").then((response) => {
-      console.log(response.data);
-      setSalesPeople(response.data);
-    });
+    async function apiCall() {
+      setLoading(true);
+      try {
+        const response = await axiosInstance.get("/api/v1/user");
+        setSalesPeople(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching salespeople", error);
+        setLoading(false);
+        setWarning("Error fetching salespeople");
+      }
+    }
+    apiCall();
   }, []);
 
   return (
@@ -25,13 +38,19 @@ function SalespersonPage() {
         <SidebarNav items={navItems} />
         <div className={generalStyles["content-container"]}>
           <h1>Sales People</h1>
-          {salesPeople.map((item) => (
-            <ListItem
-              key={item.id}
-              title={item.firstName + " " + item.lastName}
-              url={`/dealer/salesPerson/${item.id}`}
-            />
-          ))}
+          {loading ? (
+            <Loader />
+          ) : warning ? (
+            <Warning message={warning} />
+          ) : (
+            salesPeople.map((item) => (
+              <ListItem
+                key={item.id}
+                title={item.firstName + " " + item.lastName}
+                url={`/dealer/salesPerson/${item.id}`}
+              />
+            ))
+          )}
         </div>
       </main>
     </div>
