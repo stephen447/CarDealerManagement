@@ -7,10 +7,6 @@ import { useEffect, useState } from "react";
 import axiosInstance from "../../../General/Other/AxiosInstance";
 
 function SalespersonPage() {
-  const testData = [
-    { name: "Stephen Byrne", id: 1 },
-    { name: "John Doe", id: 2 },
-  ];
   const [salesPeople, setSalesPeople] = useState([]);
   const navItems = DealerNavLinks.salesPeople;
 
