@@ -5,10 +5,10 @@ import TextInput from "../../../General/Component/TextInput/TextInput";
 import SelectInput from "../../../General/Component/SelectInput/SelectInput";
 import { useState } from "react";
 import generalStyles from "../../../General/Other/GeneralStyles.module.css";
-// import styles from "./CreateStockPage.module.css";
+import axiosInstance from "../../../General/Other/AxiosInstance";
 
 function CreateStockPage() {
-  const [formData, setFormData] = useState({
+  const emptyFormData = {
     make: "",
     model: "",
     year: "",
@@ -17,27 +17,69 @@ function CreateStockPage() {
     status: "",
     buyInDate: "",
     description: "",
-  });
+    color: "",
+    engineSize: "",
+    engineType: "",
+    transmission: "",
+    mileage: "",
+    dealerId: "1234",
+    condition: "",
+    type: "",
+  };
+  const [formData, setFormData] = useState(emptyFormData);
 
   const statusOptions = [
-    { value: "DUEIN", label: "Due In" },
-    { value: "SALE", label: "Sale" },
+    { value: "DUE_IN", label: "Due In" },
+    { value: "IN_PREP", label: "In Prep" },
+    { value: "ON_SALE", label: "Sale" },
     { value: "SOLD", label: "Sold" },
+  ];
+
+  const engineTypeOptions = [
+    {
+      value: "Petrol",
+      label: "Petrol",
+    },
+    {
+      value: "Diesel",
+      label: "Diesel",
+    },
+    {
+      value: "Hybrid",
+      label: "Hybrid",
+    },
+    {
+      value: "Electric",
+      label: "Electric",
+    },
+  ];
+
+  const typeOptions = [
+    { value: "RETAIL", label: "Retail" },
+    { value: "TRADE", label: "Trade" },
+  ];
+
+  const transmissionOptions = [
+    {
+      value: "Automatic",
+      label: "Automatic",
+    },
+    {
+      value: "Manual",
+      label: "Manual",
+    },
+  ];
+
+  const conditionOptions = [
+    { value: "NEW", label: "New" },
+    { value: "USED", label: "Used" },
   ];
 
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(formData);
-    setFormData({
-      make: "",
-      model: "",
-      year: "",
-      registration: "",
-      price: "",
-      status: "",
-      buyInDate: "",
-      description: "",
-    });
+    axiosInstance.post("/api/v1/car", formData);
+    setFormData(emptyFormData);
   };
 
   // Get the options for the select from the db
@@ -103,6 +145,55 @@ function CreateStockPage() {
               label="Status"
               name="status"
               options={statusOptions}
+              formData={formData}
+              setFormData={setFormData}
+            />
+            <TextInput
+              label="Engine Size"
+              name="engineSize"
+              type="number"
+              formData={formData}
+              setFormData={setFormData}
+            />
+            <SelectInput
+              label="Engine Type"
+              name="engineType"
+              formData={formData}
+              setFormData={setFormData}
+              options={engineTypeOptions}
+            />
+            <TextInput
+              label="Color"
+              name="color"
+              type="text"
+              formData={formData}
+              setFormData={setFormData}
+            />
+            <TextInput
+              label="Mileage"
+              name="mileage"
+              type="number"
+              formData={formData}
+              setFormData={setFormData}
+            />
+            <SelectInput
+              label="Type"
+              name="type"
+              formData={formData}
+              setFormData={setFormData}
+              options={typeOptions}
+            />
+            <SelectInput
+              label="Transmission"
+              name="transmission"
+              formData={formData}
+              setFormData={setFormData}
+              options={transmissionOptions}
+            />
+            <SelectInput
+              label="Condition"
+              name="condition"
+              options={conditionOptions}
               formData={formData}
               setFormData={setFormData}
             />
