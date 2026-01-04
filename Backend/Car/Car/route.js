@@ -124,8 +124,29 @@ router.put("/:id", async (req, res) => {
     if (!id) {
       return res.status(400).json({ error: "Car ID is required" });
     }
+    const formattedData = {
+      ...req.body,
+    };
+    if (req.body.year) {
+      formattedData.year = Number(req.body.year);
+    }
+    if (req.body.price) {
+      formattedData.price = Number(req.body.price);
+    }
+    if (req.body.engineSize) {
+      formattedData.engineSize = Number(req.body.engineSize);
+    }
+    if (req.body.mileage) {
+      formattedData.mileage = Number(req.body.mileage);
+    }
+    if (req.body.buyInDate) {
+      formattedData.buyInDate = new Date(req.body.buyInDate);
+    }
+
+    formattedData.updatedAt = new Date();
+
     // Allow partial updates
-    const car = await prisma.car.update({ where: { id }, data: req.body });
+    const car = await prisma.car.update({ where: { id }, data: formattedData });
     res.json(car);
   } catch (error) {
     console.error("Error updating car:", error.message);
