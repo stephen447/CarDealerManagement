@@ -1,0 +1,7 @@
+.wanrning-container {
+  color: var(--color-warning-red);
+  background-color: var(--color-warning-red-dark);
+  font-weight: bold;
+  padding: 1rem;
+  border-radius: var(--border-radius-small);
+}
