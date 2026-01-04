@@ -6,8 +6,24 @@ const router = express.Router();
 // POST /api/v1/car - Create a new car
 router.post("/", async (req, res) => {
   try {
-    let { make, model, year, description, registration, price, dealerId } =
-      req.body;
+    let {
+      make,
+      model,
+      year,
+      description,
+      registration,
+      price,
+      dealerId,
+      engineSize,
+      engineType,
+      transmission,
+      mileage,
+      buyInDate,
+      status,
+      condition,
+      type,
+      color,
+    } = req.body;
 
     // Validate required fields
     if (
@@ -17,7 +33,16 @@ router.post("/", async (req, res) => {
       !description ||
       !registration ||
       !price ||
-      !dealerId
+      !dealerId ||
+      !engineSize ||
+      !engineType ||
+      !transmission ||
+      !mileage ||
+      !buyInDate ||
+      !status ||
+      !condition ||
+      !type ||
+      !color
     ) {
       return res.status(400).json({
         error: "Missing required fields",
@@ -29,6 +54,15 @@ router.post("/", async (req, res) => {
           "registration",
           "price",
           "dealerId",
+          "engineSize",
+          "engineType",
+          "transmission",
+          "mileage",
+          "buyInDate",
+          "status",
+          "condition",
+          "type",
+          "color",
         ],
       });
     }
@@ -36,6 +70,9 @@ router.post("/", async (req, res) => {
     // Convert year and price to number
     year = Number(year);
     price = Number(price);
+    engineSize = Number(engineSize);
+    mileage = Number(mileage);
+    buyInDate = new Date(req.body.buyInDate);
 
     // Validate year is a number
     if (
@@ -53,6 +90,13 @@ router.post("/", async (req, res) => {
     if (typeof price !== "number" || price < 0) {
       return res.status(400).json({
         error: "Invalid price. Must be a positive number",
+      });
+    }
+
+    // Validate mileage is a positive number
+    if (typeof mileage !== "number" || mileage < 0) {
+      return res.status(400).json({
+        error: "Invalid mileage. Must be a positive number",
       });
     }
 
@@ -77,6 +121,15 @@ router.post("/", async (req, res) => {
         registration,
         price,
         dealerId,
+        engineSize,
+        engineType,
+        transmission,
+        mileage,
+        buyInDate,
+        status,
+        condition,
+        type,
+        color,
       },
     });
 
