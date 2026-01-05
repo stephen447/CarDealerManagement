@@ -11,6 +11,8 @@ import {
   formatDateStringToDateInput,
 } from "../../../General/Other/GeneralFunctions";
 import axiosInstance from "../../../General/Other/AxiosInstance";
+import Warning from "../../../General/Component/Warning/Warning";
+import Loader from "../../../General/Component/Loader/Loader";
 
 function StockPage() {
   const { id } = useParams();
@@ -18,6 +20,8 @@ function StockPage() {
   const [editMode, setEditMode] = useState(false);
   const [stockData, setStockData] = useState([]);
   const [tempStockData, setTempStockData] = useState(stockData);
+  const [loading, setLoading] = useState(true);
+  const [warning, setWarning] = useState("");
 
   // Will get from datastore in future
   const statusOptions = [
@@ -62,30 +66,39 @@ function StockPage() {
   ];
 
   useEffect(() => {
-    axiosInstance.get(`/api/v1/car/${id}`).then((response) => {
-      console.log(response.data);
+    async function apiCall() {
+      setLoading(true);
+      try {
+        const response = await axiosInstance.get(`/api/v1/car/${id}`);
 
-      const formattedData = {
-        make: response.data.make,
-        model: response.data.model,
-        year: response.data.year,
-        description: response.data.description,
-        registration: response.data.registration,
-        price: response.data.price,
-        type: response.data.type,
-        status: response.data.status,
-        buyInDate: formatDateStringToDateInput(response.data.buyInDate),
-        engineSize: response.data.engineSize,
-        engineType: response.data.engineType,
-        transmission: response.data.transmission,
-        mileage: response.data.mileage,
-        color: response.data.color,
-        condition: response.data.condition,
-      };
+        const formattedData = {
+          make: response.data.make,
+          model: response.data.model,
+          year: response.data.year,
+          description: response.data.description,
+          registration: response.data.registration,
+          price: response.data.price,
+          type: response.data.type,
+          status: response.data.status,
+          buyInDate: formatDateStringToDateInput(response.data.buyInDate),
+          engineSize: response.data.engineSize,
+          engineType: response.data.engineType,
+          transmission: response.data.transmission,
+          mileage: response.data.mileage,
+          color: response.data.color,
+          condition: response.data.condition,
+        };
 
-      setStockData(formattedData);
-      setTempStockData(formattedData);
-    });
+        setStockData(formattedData);
+        setTempStockData(formattedData);
+        setLoading(false);
+      } catch (error) {
+        console.error(error);
+        setWarning("Error fetching stock");
+        setLoading(false);
+      }
+    }
+    apiCall();
   }, []);
 
   function handleSave() {
@@ -102,7 +115,15 @@ function StockPage() {
   return (
     <div>
       <Header />
-      {editMode === false ? (
+      {loading ? (
+        <div className={generalStyles["content-container"]}>
+          <Loader />
+        </div>
+      ) : warning ? (
+        <div className={generalStyles["content-container"]}>
+          <Warning message={warning} />
+        </div>
+      ) : editMode === false ? (
         <main className={styles["stock-item"]}>
           <div className={styles["stock-item-header"]}>
             <div className={styles["stock-item-header-title"]}>
@@ -112,6 +133,7 @@ function StockPage() {
             </div>
             <h1>{formatNumberToPrice(stockData.price)}</h1>
           </div>
+
           <div>
             <h2>{stockData.registration}</h2>
             <button
@@ -121,6 +143,7 @@ function StockPage() {
               Edit
             </button>
           </div>
+
           <div className={styles["stock-item-picture-container"]}>
             <img
               className={styles["stock-item-picture"]}
@@ -128,21 +151,24 @@ function StockPage() {
               alt=""
             />
           </div>
+
           <div>
             <p>Engine Size: {stockData.engineSize}</p>
-            <p> Engine Type: {stockData.engineType}</p>
+            <p>Engine Type: {stockData.engineType}</p>
             <p>Transmission: {stockData.transmission}</p>
             <p>Mileage: {formatNumberToMileage(stockData.mileage)} km</p>
             <p>Color: {stockData.color}</p>
             <p>Condition: {stockData.condition}</p>
           </div>
+
           <div>
             <h2>Description</h2>
             <p>{stockData.description}</p>
           </div>
+
           {dealer && (
             <div>
-              <h2> Dealer Details</h2>
+              <h2>Dealer Details</h2>
               <p>Buy In Date: {stockData.buyInDate}</p>
               <p>Last Updated: {stockData.updatedAt}</p>
               <p>Status: {stockData.status}</p>
