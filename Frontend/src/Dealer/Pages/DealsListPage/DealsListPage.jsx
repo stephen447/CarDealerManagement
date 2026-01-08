@@ -2,53 +2,57 @@ import Header from "../../Components/Header/Header";
 import SidebarNav from "../../../General/SideBarNav/SideBarNav";
 import DealerNavLinks from "../../../General/Other/DealerNavLinks.json";
 import generalStyles from "../../../General/Other/GeneralStyles.module.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import DealListItem from "../../Components/DealListItem/DealListItem";
+import axiosInstance from "../../../General/Other/AxiosInstance";
+import Loader from "../../../General/Component/Loader/Loader";
+import Warning from "../../../General/Component/Warning/Warning";
 
 function DealsListPage() {
   const navLinks = DealerNavLinks.deals;
-  const testDealsData = [
-    {
-      id: "1",
-      dealerId: "1",
-      salespersonId: "1",
-      salesperson: {
-        name: "John Doe",
-      },
-      carId: "1",
-      car: {
-        make: "Toyota",
-        model: "Corolla",
-        year: 2022,
-        registration: "201-D-123",
-      },
-      agreedPrice: 23000,
-      pickupDate: "",
-      dealDate: "",
-      deposit: 12000,
-      balance: 13000,
-      finance: true,
-      financeStatus: "AWAITING PAYOUT",
-      financeAmount: 13000,
-      customerName: "John Doe",
-      customerEmail: "john.doe@example.com",
-      customerNumber: "1234567890",
-    },
-  ];
+  const [loading, setLoading] = useState(true);
+  const [warning, setWarning] = useState("");
+  const [dealsData, setDealsData] = useState([]);
 
-  const [dealsData, setDealsData] = useState(testDealsData);
+  useEffect(() => {
+    async function apiCall() {
+      setLoading(true);
+      try {
+        const response = await axiosInstance.get("/api/v1/deal");
+        console.log("deal response", response.data);
+        setDealsData(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching deals", error);
+        setLoading(false);
+        setWarning("Error fetching deals");
+      }
+    }
+    apiCall();
+  }, []);
+  //
 
   return (
     <div style={{ height: "100vh" }}>
       <Header />
       <main className={generalStyles["main-container"]}>
         <SidebarNav items={navLinks} />
-        <div className={generalStyles["content-container"]}>
-          <h1>Deals List Page</h1>
-          {dealsData.map((deal) => (
-            <DealListItem deal={deal} />
-          ))}
-        </div>
+        {loading ? (
+          <div className={generalStyles["content-container"]}>
+            <Loader />
+          </div>
+        ) : warning ? (
+          <div className={generalStyles["content-container"]}>
+            <Warning message={warning} />
+          </div>
+        ) : (
+          <div className={generalStyles["content-container"]}>
+            <h1>Deals List Page</h1>
+            {dealsData.map((deal) => (
+              <DealListItem deal={deal} />
+            ))}
+          </div>
+        )}
       </main>
     </div>
   );
