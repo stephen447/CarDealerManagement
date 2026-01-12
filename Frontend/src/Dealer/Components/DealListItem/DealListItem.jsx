@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 function DealListItem({ deal }) {
   const navigate = useNavigate();
   function handleClick() {
-    navigate(`/deal/${deal.id}`);
+    navigate(`/dealer/deal/${deal.id}`);
   }
   function handleSalespersonClick() {
     navigate(`/dealer/salesPerson/${deal.salesperson.id}`);

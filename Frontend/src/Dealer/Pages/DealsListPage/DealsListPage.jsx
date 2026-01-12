@@ -19,7 +19,6 @@ function DealsListPage() {
       setLoading(true);
       try {
         const response = await axiosInstance.get("/api/v1/deal");
-        console.log("deal response", response.data);
         setDealsData(response.data);
         setLoading(false);
       } catch (error) {
