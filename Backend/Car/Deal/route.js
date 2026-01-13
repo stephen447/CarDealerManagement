@@ -241,6 +241,8 @@ router.get("/", async (req, res) => {
             id: true,
             email: true,
             role: true,
+            firstName: true,
+            lastName: true,
             // Don't include password
           },
         },
@@ -274,7 +276,8 @@ router.get("/:id", async (req, res) => {
             id: true,
             email: true,
             role: true,
-            // Don't include password
+            firstName: true,
+            lastName: true,
           },
         },
       },
@@ -434,6 +437,10 @@ router.put("/:id", async (req, res) => {
       }
     }
 
+    if (data.finance !== undefined) {
+      data.finance = Boolean(data.finance);
+    }
+
     if (data.dealerId) {
       const dealer = await prisma.dealer.findUnique({
         where: { id: data.dealerId },
@@ -460,6 +467,11 @@ router.put("/:id", async (req, res) => {
     const deal = await prisma.deal.update({
       where: { id },
       data,
+      include: {
+        car: true,
+        dealer: true,
+        salesperson: true,
+      },
     });
 
     res.json(deal);

@@ -16,3 +16,11 @@ export function formatNumberToMileage(value) {
 export function formatDateStringToDateInput(dateString) {
   return new Date(dateString).toISOString().split("T")[0];
 }
+
+export function convertScreamingSnakeToDisplayCase(string) {
+  return string
+    .toLowerCase()
+    .split("_")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}

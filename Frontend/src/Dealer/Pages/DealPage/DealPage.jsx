@@ -8,6 +8,10 @@ import axiosInstance from "../../../General/Other/AxiosInstance";
 import Loader from "../../../General/Component/Loader/Loader";
 import Warning from "../../../General/Component/Warning/Warning";
 import RecordSelectorModal from "../../../General/Component/RecordSelectorModal/RecordSelectorModal";
+import {
+  formatDateStringToDateInput,
+  convertScreamingSnakeToDisplayCase,
+} from "../../../General/Other/GeneralFunctions";
 
 function DealPage() {
   const { id } = useParams();
@@ -31,6 +35,11 @@ function DealPage() {
         const response = await axiosInstance.get(`/api/v1/deal/${id}`);
         console.log(response.data);
         setDealData(response.data);
+        setDealData((prev) => ({
+          ...prev,
+          pickupDate: formatDateStringToDateInput(prev.pickupDate),
+          dealDate: formatDateStringToDateInput(prev.dealDate),
+        }));
         setOriginalDealData(response.data); // Store original data
         setLoading(false);
       } catch (error) {
@@ -62,6 +71,7 @@ function DealPage() {
         `/api/v1/deal/${id}`,
         changedFields // Only send changed fields
       );
+      console.log(response.data);
       setDealData(response.data);
       setOriginalDealData(response.data); // Update original data
       setEditMode(false);
@@ -79,7 +89,7 @@ function DealPage() {
         <Header />
         <main className={generalStyles["main-container"]}>
           <div className={generalStyles["content-container"]}>
-            <Loader size={64} />
+            <Loader />
           </div>
         </main>
       </div>
@@ -311,7 +321,10 @@ function DealPage() {
               <p>Deposit: {dealData?.deposit}</p>
               <p>Balance: {dealData?.balance}</p>
               <p>Finance: {dealData?.finance ? "Yes" : "No"}</p>
-              <p>Finance Status: {dealData?.financeStatus}</p>
+              <p>
+                Finance Status:{" "}
+                {convertScreamingSnakeToDisplayCase(dealData?.financeStatus)}
+              </p>
               <p>Finance Amount: {dealData?.financeAmount}</p>
             </div>
             <button

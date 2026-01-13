@@ -121,6 +121,8 @@ router.get("/:id", async (req, res) => {
       include: {
         dealer: true,
         deal: true,
+        firstName: true,
+        lastName: true,
       },
     });
 
