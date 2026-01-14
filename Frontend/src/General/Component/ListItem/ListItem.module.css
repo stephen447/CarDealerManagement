@@ -5,6 +5,7 @@
   background-color: var(--color-background-secondary);
   color: var(--color-text-secondary);
   cursor: pointer;
+  font-size: var(--font-size-medium);
 }
 
 .list-item:hover {

@@ -22,8 +22,9 @@
   align-items: center;
 }
 .content-container {
-  max-width: 420px;
-  margin: 2rem auto;
+  max-width: var(--content-max-width);
+  margin: var(--content-margin-block) auto;
+  padding: 0 var(--page-padding);
   text-align: center;
   gap: 1rem;
   display: flex;
@@ -31,8 +32,22 @@
   overflow-y: scroll;
   align-items: center;
 }
+
+.content-container h1 {
+  font-size: var(--font-size-large);
+}
+.content-container p {
+  font-size: var(--font-size-small);
+}
+
+.content-container button {
+  font-size: var(--font-size-medium);
+}
+.content-container h2 {
+  font-size: var(--font-size-medium);
+}
 .main-container {
   display: flex;
-  height: 93%;
+  min-height: calc(100vh - var(--header-height));
   color: var(--color-text-primary);
 }
