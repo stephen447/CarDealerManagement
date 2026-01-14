@@ -99,7 +99,7 @@ function StockPage() {
       }
     }
     apiCall();
-  }, []);
+  }, [id]);
 
   function handleSave() {
     axiosInstance.put(`/api/v1/car/${id}`, tempStockData);

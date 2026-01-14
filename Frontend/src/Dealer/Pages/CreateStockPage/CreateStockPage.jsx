@@ -6,7 +6,6 @@ import SelectInput from "../../../General/Component/SelectInput/SelectInput";
 import { useState } from "react";
 import generalStyles from "../../../General/Other/GeneralStyles.module.css";
 import axiosInstance from "../../../General/Other/AxiosInstance";
-import styles from "./CreateStockPage.module.css";
 
 function CreateStockPage() {
   const emptyFormData = {
