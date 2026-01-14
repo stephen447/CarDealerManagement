@@ -33,3 +33,11 @@
   margin: 1rem auto;
   justify-items: center;
 }
+
+.form-button-container {
+  grid-column: 1 / -1;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}

@@ -6,6 +6,7 @@ import SelectInput from "../../../General/Component/SelectInput/SelectInput";
 import { useState } from "react";
 import generalStyles from "../../../General/Other/GeneralStyles.module.css";
 import axiosInstance from "../../../General/Other/AxiosInstance";
+import styles from "./CreateStockPage.module.css";
 
 function CreateStockPage() {
   const emptyFormData = {
@@ -91,7 +92,7 @@ function CreateStockPage() {
         <SidebarNav items={DealerNavLinks.stock} />
         <div className={generalStyles["content-container"]}>
           <h1>Create Stock</h1>
-          <form onSubmit={handleSubmit} className={generalStyles["form"]}>
+          <form onSubmit={handleSubmit} className={generalStyles["form-grid"]}>
             <TextInput
               label="Make"
               name="make"
@@ -197,9 +198,11 @@ function CreateStockPage() {
               formData={formData}
               setFormData={setFormData}
             />
-            <button type="submit" className={generalStyles["button-primary"]}>
-              Create Stock
-            </button>
+            <div className={generalStyles["form-button-container"]}>
+              <button type="submit" className={generalStyles["button-primary"]}>
+                Create Stock
+              </button>
+            </div>
           </form>
         </div>
       </main>
