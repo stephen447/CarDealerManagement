@@ -8,6 +8,7 @@ import axiosInstance from "../../../General/Other/AxiosInstance";
 import Warning from "../../../General/Component/Warning/Warning";
 import Loader from "../../../General/Component/Loader/Loader";
 import SelectInput from "../../../General/Component/SelectInput/SelectInput";
+import { formatRegistration } from "../../../General/Other/GeneralFunctions";
 
 function StockListPage() {
   const navLinks = DealerNavLinks.stock;
@@ -30,7 +31,6 @@ function StockListPage() {
 
   const sortStockData = (data, sortOption) => {
     const sortedData = [...data];
-    console.log("sortOption", sortOption);
     switch (sortOption) {
       case "make-asc":
         return sortedData.sort((a, b) =>
@@ -66,7 +66,6 @@ function StockListPage() {
       try {
         setLoading(true);
         const response = await axiosInstance.get("/api/v1/car");
-        console.log(response.data);
         setStockData(response.data);
         setLoading(false);
       } catch (error) {
@@ -78,13 +77,9 @@ function StockListPage() {
     apicall();
   }, []);
 
-  // const sortedStockData = sortStockData(stockData, sortBy);
-
   useEffect(() => {
-    console.log("stockData", stockData);
     const sortedData = sortStockData(stockData, sortBy.sortBy);
     setSortedStockData(sortedData);
-    console.log("sortedData", sortedData);
   }, [stockData, sortBy.sortBy]);
 
   return (

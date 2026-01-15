@@ -9,6 +9,7 @@ import SelectInput from "../../../General/Component/SelectInput/SelectInput";
 import {
   formatNumberToMileage,
   formatDateStringToDateInput,
+  formatRegistration,
 } from "../../../General/Other/GeneralFunctions";
 import axiosInstance from "../../../General/Other/AxiosInstance";
 import Warning from "../../../General/Component/Warning/Warning";
@@ -76,7 +77,7 @@ function StockPage() {
           model: response.data.model,
           year: response.data.year,
           description: response.data.description,
-          registration: response.data.registration,
+          registration: formatRegistration(response.data.registration),
           price: response.data.price,
           type: response.data.type,
           status: response.data.status,
@@ -102,6 +103,10 @@ function StockPage() {
   }, [id]);
 
   function handleSave() {
+    setTempStockData({
+      ...tempStockData,
+      registration: formatRegistration(tempStockData?.registration),
+    });
     axiosInstance.put(`/api/v1/car/${id}`, tempStockData);
     setStockData(tempStockData);
     setEditMode(false);

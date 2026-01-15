@@ -11,6 +11,7 @@ import RecordSelectorModal from "../../../General/Component/RecordSelectorModal/
 import {
   formatDateStringToDateInput,
   convertScreamingSnakeToDisplayCase,
+  formatRegistration,
 } from "../../../General/Other/GeneralFunctions";
 
 function DealPage() {
@@ -33,13 +34,11 @@ function DealPage() {
       try {
         setLoading(true);
         const response = await axiosInstance.get(`/api/v1/deal/${id}`);
-        console.log(response.data);
-        setDealData(response.data);
-        setDealData((prev) => ({
-          ...prev,
-          pickupDate: formatDateStringToDateInput(prev.pickupDate),
-          dealDate: formatDateStringToDateInput(prev.dealDate),
-        }));
+        setDealData(response.data, {
+          registration: formatRegistration(response?.data?.registration),
+          pickupDate: formatDateStringToDateInput(response?.data?.pickupDate),
+          dealDate: formatDateStringToDateInput(response?.data?.dealDate),
+        });
         setOriginalDealData(response.data); // Store original data
         setLoading(false);
       } catch (error) {
@@ -62,18 +61,27 @@ function DealPage() {
       }
     });
 
-    console.log("Changed fields:", changedFields);
+    if (dealData.registration) {
+      dealData.registration = formatRegistration(dealData?.registration);
+    }
 
     try {
       setUpdateLoading(true);
       setUpdateWarning("");
       const response = await axiosInstance.put(
         `/api/v1/deal/${id}`,
-        changedFields // Only send changed fields
+        changedFields
       );
-      console.log(response.data);
-      setDealData(response.data);
-      setOriginalDealData(response.data); // Update original data
+      setDealData(response.data, {
+        registration: formatRegistration(response?.data?.registration),
+        pickupDate: formatDateStringToDateInput(response?.data?.pickupDate),
+        dealDate: formatDateStringToDateInput(response?.data?.dealDate),
+      });
+      setOriginalDealData(response.data, {
+        registration: formatRegistration(response?.data?.registration),
+        pickupDate: formatDateStringToDateInput(response?.data?.pickupDate),
+        dealDate: formatDateStringToDateInput(response?.data?.dealDate),
+      });
       setEditMode(false);
       setUpdateLoading(false);
     } catch (error) {

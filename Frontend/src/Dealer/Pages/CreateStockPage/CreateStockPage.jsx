@@ -6,6 +6,7 @@ import SelectInput from "../../../General/Component/SelectInput/SelectInput";
 import { useState } from "react";
 import generalStyles from "../../../General/Other/GeneralStyles.module.css";
 import axiosInstance from "../../../General/Other/AxiosInstance";
+import { formatRegistration } from "../../../General/Other/GeneralFunctions";
 
 function CreateStockPage() {
   const emptyFormData = {
@@ -77,7 +78,10 @@ function CreateStockPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
+    setFormData({
+      ...formData,
+      registration: formatRegistration(formData?.registration),
+    });
     axiosInstance.post("/api/v1/car", formData);
     setFormData(emptyFormData);
   };
