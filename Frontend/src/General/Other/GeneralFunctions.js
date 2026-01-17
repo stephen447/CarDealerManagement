@@ -25,6 +25,7 @@ export function convertScreamingSnakeToDisplayCase(string) {
     .join(" ");
 }
 export function formatRegistration(registration) {
+  if (!registration) return "";
   return registration
     .toUpperCase()
     .replace(/([0-9])([A-Z])/g, "$1-$2")

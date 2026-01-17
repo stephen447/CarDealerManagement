@@ -35,7 +35,7 @@ function DealPage() {
         setLoading(true);
         const response = await axiosInstance.get(`/api/v1/deal/${id}`);
         setDealData(response.data, {
-          registration: formatRegistration(response?.data?.registration),
+          registration: formatRegistration(response?.data?.car?.registration),
           pickupDate: formatDateStringToDateInput(response?.data?.pickupDate),
           dealDate: formatDateStringToDateInput(response?.data?.dealDate),
         });
