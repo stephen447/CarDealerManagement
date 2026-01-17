@@ -6,17 +6,16 @@
   font-size: var(--font-size-medium);
 }
 
-.select-input select {
+.select-input input {
   padding: 0.5rem 0.6rem;
   border-radius: var(--border-radius-small);
   background-color: var(--color-gray-200);
   border: none;
 }
 
-.select-input select:focus {
+.select-input input:focus {
   outline: none;
 }
 .select-input {
-  max-width: var(--content-max-width);
-  width: 100%;
+  max-width: 420px;
 }

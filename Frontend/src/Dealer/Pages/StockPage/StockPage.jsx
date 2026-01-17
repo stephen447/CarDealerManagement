@@ -24,6 +24,9 @@ function StockPage() {
   const [tempStockData, setTempStockData] = useState(stockData);
   const [loading, setLoading] = useState(true);
   const [warning, setWarning] = useState("");
+  const [manufacturerOptions, setManufacturerOptions] = useState([]);
+  const [modelOptions, setModelOptions] = useState([]);
+  const [carOptions, setCarOptions] = useState([]);
 
   // Will get from datastore in future
   const statusOptions = [
@@ -118,6 +121,53 @@ function StockPage() {
     setEditMode(false);
   }
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("/CarOptions.json");
+        const data = await response.json();
+
+        setCarOptions(data);
+
+        const manufacturerOptions = data
+          .map((car) => ({
+            value: car.brand,
+            label: car.brand,
+          }))
+          .sort((a, b) => a.label.localeCompare(b.label));
+
+        setManufacturerOptions(manufacturerOptions);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const selectedCar = carOptions.find(
+      (car) => car.brand === tempStockData.make
+    );
+
+    if (!selectedCar) return;
+
+    // Format the models for the select input
+    const modelOptions = selectedCar.models.map((model) => ({
+      value: model,
+      label: model,
+    }));
+
+    // Set the model options for the newly selected make
+    setModelOptions(modelOptions);
+
+    //Set the first model as the default of newly selected make
+    setTempStockData((prev) => ({
+      ...prev,
+      model: modelOptions[0]?.value ?? "",
+    }));
+  }, [tempStockData.make, carOptions]);
+
   return (
     <div>
       <Header />
@@ -204,19 +254,21 @@ function StockPage() {
       ) : (
         <main className={generalStyles["content-container"]}>
           <div className={generalStyles["form-grid"]}>
-            <TextInput
+            <SelectInput
               label="Make"
               name="make"
               type="text"
               formData={tempStockData}
               setFormData={setTempStockData}
+              options={manufacturerOptions}
             />
-            <TextInput
+            <SelectInput
               label="Model"
               name="model"
               type="text"
               formData={tempStockData}
               setFormData={setTempStockData}
+              options={modelOptions}
             />
             <TextInput
               label="Year"
