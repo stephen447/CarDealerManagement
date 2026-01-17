@@ -10,6 +10,7 @@ import {
   formatNumberToMileage,
   formatDateStringToDateInput,
   formatRegistration,
+  convertScreamingSnakeToDisplayCase,
 } from "../../../General/Other/GeneralFunctions";
 import axiosInstance from "../../../General/Other/AxiosInstance";
 import Warning from "../../../General/Component/Warning/Warning";
@@ -141,12 +142,6 @@ function StockPage() {
 
           <div>
             <h2>{stockData.registration}</h2>
-            <button
-              onClick={() => setEditMode(true)}
-              className={generalStyles["button-primary"]}
-            >
-              Edit
-            </button>
           </div>
 
           <div className={styles["stock-item-picture-container"]}>
@@ -157,27 +152,52 @@ function StockPage() {
             />
           </div>
 
-          <div>
-            <p>Engine Size: {stockData.engineSize}</p>
-            <p>Engine Type: {stockData.engineType}</p>
-            <p>Transmission: {stockData.transmission}</p>
-            <p>Mileage: {formatNumberToMileage(stockData.mileage)} km</p>
-            <p>Color: {stockData.color}</p>
-            <p>Condition: {stockData.condition}</p>
+          <div className={styles["stock-item-details-container"]}>
+            <h2> Vehicle Details</h2>
+            <div className={generalStyles["form-grid"]}>
+              <p>Engine Size: {stockData.engineSize}</p>
+              <p>Engine Type: {stockData.engineType}</p>
+              <p>Transmission: {stockData.transmission}</p>
+              <p>Mileage: {formatNumberToMileage(stockData.mileage)} km</p>
+              <p>Color: {stockData.color}</p>
+              <p>
+                Condition:{" "}
+                {convertScreamingSnakeToDisplayCase(stockData.condition)}
+              </p>
+            </div>
           </div>
 
-          <div>
+          <div className={styles["stock-item-details-container"]}>
             <h2>Description</h2>
-            <p>{stockData.description}</p>
+            <div className={generalStyles["form-grid"]}>
+              <p>{stockData.description}</p>
+            </div>
           </div>
 
           {dealer && (
-            <div>
+            <div className={styles["stock-item-details-container"]}>
               <h2>Dealer Details</h2>
-              <p>Buy In Date: {stockData.buyInDate}</p>
-              <p>Last Updated: {stockData.updatedAt}</p>
-              <p>Status: {stockData.status}</p>
-              <p>Type: {stockData.type}</p>
+              <div className={generalStyles["form-grid"]}>
+                <p>Buy In Date: {stockData.buyInDate}</p>
+                <p>Last Updated: {stockData.updatedAt}</p>
+                <p>
+                  Status: {convertScreamingSnakeToDisplayCase(stockData.status)}
+                </p>
+                <p>
+                  Type: {convertScreamingSnakeToDisplayCase(stockData.type)}
+                </p>
+                <div className={generalStyles["form-button-container"]}>
+                  <button
+                    onClick={() => setEditMode(true)}
+                    className={generalStyles["button-primary"]}
+                  >
+                    Edit
+                  </button>
+                  <button className={generalStyles["button-primary"]}>
+                    Delete
+                  </button>
+                </div>
+              </div>
             </div>
           )}
         </main>
@@ -282,7 +302,7 @@ function StockPage() {
               setFormData={setTempStockData}
               options={statusOptions}
             />
-            <div className={styles["form-button-container"]}>
+            <div className={generalStyles["form-button-container"]}>
               <button
                 onClick={() => handleCancel()}
                 className={generalStyles["button-primary"]}

@@ -34,10 +34,10 @@
   justify-items: center;
 }
 
-.form-button-container {
-  grid-column: 1 / -1;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
+.stock-item-details-container {
+  margin: 1rem;
+  border: 1px solid grey;
+  border-radius: var(--border-radius-medium);
+  padding: 1rem;
+  text-align: center;
 }

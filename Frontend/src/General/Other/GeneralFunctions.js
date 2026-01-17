@@ -25,8 +25,8 @@ export function convertScreamingSnakeToDisplayCase(string) {
     .join(" ");
 }
 export function formatRegistration(registration) {
-  //e.g. 131-d123 -> 131-D-123, 12MH-1222 -> 12-MH-1222
   return registration
-    .replace(/([0-9])([a-zA-Z])/g, "$1-$2")
-    .replace(/([a-zA-Z])([0-9])/g, "$1-$2");
+    .toUpperCase()
+    .replace(/([0-9])([A-Z])/g, "$1-$2")
+    .replace(/([A-Z])([0-9])/g, "$1-$2");
 }
