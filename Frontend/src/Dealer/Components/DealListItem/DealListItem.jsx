@@ -1,4 +1,3 @@
-import generalStyles from "../../../General/Other/GeneralStyles.module.css";
 import styles from "./DealListItem.module.css";
 import {
   formatNumberToPrice,
@@ -11,9 +10,6 @@ function DealListItem({ deal }) {
   function handleClick() {
     navigate(`/dealer/deal/${deal.id}`);
   }
-  function handleSalespersonClick() {
-    navigate(`/dealer/salesPerson/${deal.salesperson.id}`);
-  }
 
   // ToDo: Add filtering options
   // ToDo: Add sorting options
@@ -21,25 +17,27 @@ function DealListItem({ deal }) {
   // ToDo: Add search options
   return (
     <div>
-      <button className={generalStyles["button-primary"]} onClick={handleClick}>
+      <button className={styles["deal-list-item-button"]} onClick={handleClick}>
         <div className={styles["deal-list-item"]}>
           <div className={styles["deal-list-item-row"]}>
             <h2>{deal.car.make}</h2>
-            <h2>{deal.car.model}</h2>
             <h2>{deal.car.year}</h2>
+          </div>
+          <div className={styles["deal-list-item-row"]}>
+            <h2>{deal.car.model}</h2>
+          </div>
+          <div className={styles["deal-list-item-row"]}>
+            <p>{deal.car.registration}</p>
           </div>
 
           <div className={styles["deal-list-item-row"]}>
-            <p>{deal.car.registration}</p>
             <p>{formatDateString(deal.dealDate)}</p>
             <p>{formatNumberToPrice(deal.agreedPrice)}</p>
           </div>
           <div className={styles["deal-list-item-row"]}>
             <p>
               Salesperson:{" "}
-              <button onClick={handleSalespersonClick}>
-                {deal.salesperson.firstName + " " + deal.salesperson.lastName}
-              </button>
+              {deal.salesperson.firstName + " " + deal.salesperson.lastName}
             </p>
           </div>
         </div>

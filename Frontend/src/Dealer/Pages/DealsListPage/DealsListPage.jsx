@@ -47,9 +47,11 @@ function DealsListPage() {
         ) : (
           <div className={generalStyles["content-container"]}>
             <h1>Deals List Page</h1>
-            {dealsData.map((deal) => (
-              <DealListItem deal={deal} />
-            ))}
+            <div className={generalStyles["form-grid"]}>
+              {dealsData.map((deal) => (
+                <DealListItem deal={deal} />
+              ))}
+            </div>
           </div>
         )}
       </main>

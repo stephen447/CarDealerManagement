@@ -9,3 +9,21 @@
   display: flex;
   gap: 0.5rem;
 }
+
+.deal-list-item-button {
+  margin-top: 0.75rem;
+  padding: 0.6rem;
+  border: none;
+  background-color: var(--color-background-secondary);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  padding: 0.6rem;
+  border-radius: var(--border-radius-small);
+  min-width: 95px;
+  min-height: 300px;
+  width: 100%;
+}
+.deal-list-item-button:hover {
+  background-color: var(--color-background-secondary-hover);
+  color: var(--color-text-secondary-hover);
+}
