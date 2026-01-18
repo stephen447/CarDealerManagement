@@ -1,5 +1,6 @@
 import Header from "../../Components/Header/Header";
 import generalStyles from "../../../General/Other/GeneralStyles.module.css";
+import styles from "./DealPage.module.css";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import TextInput from "../../../General/Component/TextInput/TextInput";
@@ -12,6 +13,7 @@ import {
   formatDateStringToDateInput,
   convertScreamingSnakeToDisplayCase,
   formatRegistration,
+  formatNumberToPrice,
 } from "../../../General/Other/GeneralFunctions";
 
 function DealPage() {
@@ -121,156 +123,182 @@ function DealPage() {
     <div>
       <Header />
       <main className={generalStyles["main-container"]}>
-        <h1>Deal ID: {id}</h1>
         {editMode ? (
           <div className={generalStyles["content-container"]}>
-            <div>
+            <h1>Deal ID: {id}</h1>
+
+            <div className={generalStyles["section"]}>
               <h2>Vehicle Details</h2>
-              {updateWarning && <Warning message={updateWarning} />}
-              <div className={generalStyles["form-group"]}>
-                <label>Vehicle</label>
-                <div className={generalStyles["selected-value"]}>
-                  {dealData?.car
-                    ? `${dealData.car.make} ${dealData.car.model} (${dealData.car.year})`
-                    : "No vehicle selected"}
+              <div
+                className={
+                  generalStyles["form-grid"] +
+                  " " +
+                  styles["deal-detail-container"]
+                }
+              >
+                {updateWarning && <Warning message={updateWarning} />}
+                <div className={generalStyles["form-group"]}>
+                  <label>Vehicle</label>
+                  <div className={generalStyles["selected-value"]}>
+                    {dealData?.car
+                      ? `${dealData.car.make} ${dealData.car.model} (${dealData.car.year})`
+                      : "No vehicle selected"}
+                  </div>
+                  <button
+                    type="button"
+                    className={generalStyles["button-primary"]}
+                    onClick={() => {
+                      setCarModalOpen(true);
+                    }}
+                  >
+                    Select Vehicle
+                  </button>
                 </div>
-                <button
-                  type="button"
-                  className={generalStyles["button-primary"]}
-                  onClick={() => {
-                    setCarModalOpen(true);
-                  }}
-                >
-                  Select Vehicle
-                </button>
               </div>
             </div>
+
             <div className={generalStyles["section"]}>
               <h2>Person Details</h2>
-              <div className={generalStyles["form-group"]}>
-                <label>Salesperson</label>
-                <div className={generalStyles["selected-value"]}>
-                  {dealData?.salesperson
-                    ? `${dealData.salesperson.firstName} ${dealData.salesperson.lastName}`
-                    : "No salesperson selected"}
+              <div
+                className={
+                  generalStyles["form-grid"] +
+                  " " +
+                  styles["deal-detail-container"]
+                }
+              >
+                <div>
+                  <label>Salesperson</label>
+                  <div className={generalStyles["selected-value"]}>
+                    {dealData?.salesperson
+                      ? `${dealData.salesperson.firstName} ${dealData.salesperson.lastName}`
+                      : "No salesperson selected"}
+                  </div>
+                  <button
+                    type="button"
+                    className={generalStyles["button-primary"]}
+                    onClick={() => {
+                      setSalespersonModalOpen(true);
+                    }}
+                  >
+                    Select Salesperson
+                  </button>
                 </div>
-                <button
-                  type="button"
-                  className={generalStyles["button-primary"]}
-                  onClick={() => {
-                    setSalespersonModalOpen(true);
-                  }}
-                >
-                  Select Salesperson
-                </button>
-              </div>
 
-              <TextInput
-                label="Customer FirstName"
-                name="customerFirstName"
-                formData={dealData}
-                setFormData={setDealData}
-              />
-              <TextInput
-                label="Customer LastName"
-                name="customerLastName"
-                formData={dealData}
-                setFormData={setDealData}
-              />
-              <TextInput
-                label="Customer Email"
-                name="customerEmail"
-                formData={dealData}
-                setFormData={setDealData}
-              />
-              <TextInput
-                label="Customer Number"
-                name="customerNumber"
-                formData={dealData}
-                setFormData={setDealData}
-              />
-              <TextInput
-                label="Deal Date"
-                name="dealDate"
-                formData={dealData}
-                setFormData={setDealData}
-                type="date"
-              />
-              <TextInput
-                label="Pickup Date"
-                name="pickupDate"
-                formData={dealData}
-                setFormData={setDealData}
-                type="date"
-              />
+                <TextInput
+                  label="Customer FirstName"
+                  name="customerFirstName"
+                  formData={dealData}
+                  setFormData={setDealData}
+                />
+                <TextInput
+                  label="Customer LastName"
+                  name="customerLastName"
+                  formData={dealData}
+                  setFormData={setDealData}
+                />
+                <TextInput
+                  label="Customer Email"
+                  name="customerEmail"
+                  formData={dealData}
+                  setFormData={setDealData}
+                />
+                <TextInput
+                  label="Customer Number"
+                  name="customerNumber"
+                  formData={dealData}
+                  setFormData={setDealData}
+                />
+                <TextInput
+                  label="Deal Date"
+                  name="dealDate"
+                  formData={dealData}
+                  setFormData={setDealData}
+                  type="date"
+                />
+                <TextInput
+                  label="Pickup Date"
+                  name="pickupDate"
+                  formData={dealData}
+                  setFormData={setDealData}
+                  type="date"
+                />
+              </div>
             </div>
             <div>
               <h2>Deal Details</h2>
-              <SelectInput
-                label="Status"
-                name="status"
-                formData={dealData}
-                setFormData={setDealData}
-                options={[
-                  { value: "PENDING", label: "Pending" },
-                  { value: "Declined", label: "Declined" },
-                  { value: "AGREED", label: "Agreed" },
-                  { value: "CANCELLED", label: "Cancelled" },
-                  { value: "COMPLETED", label: "Completed" },
-                ]}
-              />
-              <TextInput
-                label="Agreed Price"
-                name="agreedPrice"
-                formData={dealData}
-                setFormData={setDealData}
-                type="number"
-              />
-              <TextInput
-                label="Deposit"
-                name="deposit"
-                formData={dealData}
-                setFormData={setDealData}
-                type="number"
-              />
-              <TextInput
-                label="Balance"
-                name="balance"
-                formData={dealData}
-                setFormData={setDealData}
-                type="number"
-              />
-              <SelectInput
-                label="Finance"
-                name="finance"
-                formData={dealData}
-                setFormData={setDealData}
-                options={[
-                  { value: true, label: "Yes" },
-                  { value: false, label: "No" },
-                ]}
-              />
-              <SelectInput
-                label="Finance Status"
-                name="financeStatus"
-                formData={dealData}
-                setFormData={setDealData}
-                options={[
-                  { value: "NOT_APPLIED", label: "Not Applied" },
-                  { value: "AWAITING_APPROVAL", label: "Awaiting Approval" },
-                  { value: "APPROVED", label: "Approved" },
-                  { value: "PENDING", label: "Pending" },
-                  { value: "AWAITING_PAYMENT", label: "Awaiting Payment" },
-                  { value: "PAID", label: "Paid" },
-                ]}
-              />
-              <TextInput
-                label="Finance Amount"
-                name="financeAmount"
-                formData={dealData}
-                setFormData={setDealData}
-                type="number"
-              />
+              <div
+                className={
+                  generalStyles["form-grid"] +
+                  " " +
+                  styles["deal-detail-container"]
+                }
+              >
+                <SelectInput
+                  label="Status"
+                  name="status"
+                  formData={dealData}
+                  setFormData={setDealData}
+                  options={[
+                    { value: "PENDING", label: "Pending" },
+                    { value: "Declined", label: "Declined" },
+                    { value: "AGREED", label: "Agreed" },
+                    { value: "CANCELLED", label: "Cancelled" },
+                    { value: "COMPLETED", label: "Completed" },
+                  ]}
+                />
+                <TextInput
+                  label="Agreed Price"
+                  name="agreedPrice"
+                  formData={dealData}
+                  setFormData={setDealData}
+                  type="number"
+                />
+                <TextInput
+                  label="Deposit"
+                  name="deposit"
+                  formData={dealData}
+                  setFormData={setDealData}
+                  type="number"
+                />
+                <TextInput
+                  label="Balance"
+                  name="balance"
+                  formData={dealData}
+                  setFormData={setDealData}
+                  type="number"
+                />
+                <SelectInput
+                  label="Finance"
+                  name="finance"
+                  formData={dealData}
+                  setFormData={setDealData}
+                  options={[
+                    { value: true, label: "Yes" },
+                    { value: false, label: "No" },
+                  ]}
+                />
+                <SelectInput
+                  label="Finance Status"
+                  name="financeStatus"
+                  formData={dealData}
+                  setFormData={setDealData}
+                  options={[
+                    { value: "NOT_APPLIED", label: "Not Applied" },
+                    { value: "AWAITING_APPROVAL", label: "Awaiting Approval" },
+                    { value: "APPROVED", label: "Approved" },
+                    { value: "PENDING", label: "Pending" },
+                    { value: "AWAITING_PAYMENT", label: "Awaiting Payment" },
+                    { value: "PAID", label: "Paid" },
+                  ]}
+                />
+                <TextInput
+                  label="Finance Amount"
+                  name="financeAmount"
+                  formData={dealData}
+                  setFormData={setDealData}
+                  type="number"
+                />
+              </div>
             </div>
             <button
               onClick={() => setEditMode(false)}
@@ -289,51 +317,82 @@ function DealPage() {
           </div>
         ) : (
           <div className={generalStyles["content-container"]}>
+            <h1>Deal ID: {id}</h1>
             <div>
               <h2>Vehicle Details</h2>
-              <p>Make: {dealData?.car?.make}</p>
-              <p>Model: {dealData?.car?.model}</p>
-              <p>Year: {dealData?.car?.year}</p>
-              <p>Registration: {dealData?.car?.registration}</p>
-              <p>Price: {dealData?.agreedPrice}</p>
+              <div
+                className={
+                  generalStyles["form-grid"] +
+                  " " +
+                  styles["deal-detail-container"]
+                }
+              >
+                <p>Make: {dealData?.car?.make}</p>
+                <p>Model: {dealData?.car?.model}</p>
+                <p>Year: {dealData?.car?.year}</p>
+                <p>Registration: {dealData?.car?.registration}</p>
+                <p>Price: {formatNumberToPrice(dealData?.agreedPrice)}</p>
+              </div>
             </div>
             <div>
               <h2> Person Details</h2>
-              <p>
-                Salesperson: {dealData?.salesperson?.firstName}{" "}
-                {dealData?.salesperson?.lastName}
-              </p>
-              <p>
-                Customer Name:{" "}
-                {dealData?.customerFirstName + " " + dealData?.customerLastName}
-              </p>
-              <p>Customer Email: {dealData?.customerEmail}</p>
-              <p>Customer Number: {dealData?.customerNumber}</p>
+              <div
+                className={
+                  generalStyles["form-grid"] +
+                  " " +
+                  styles["deal-detail-container"]
+                }
+              >
+                <p>
+                  Salesperson: {dealData?.salesperson?.firstName}{" "}
+                  {dealData?.salesperson?.lastName}
+                </p>
+                <p>
+                  Customer Name:{" "}
+                  {dealData?.customerFirstName +
+                    " " +
+                    dealData?.customerLastName}
+                </p>
+                <p>Customer Email: {dealData?.customerEmail}</p>
+                <p>Customer Number: {dealData?.customerNumber}</p>
+              </div>
             </div>
             <div>
               <h2>Deal Details</h2>
-              <p>Status: {dealData?.status}</p>
-              <p>
-                Deal Date:{" "}
-                {dealData?.dealDate
-                  ? new Date(dealData.dealDate).toLocaleDateString()
-                  : ""}
-              </p>
-              <p>
-                Pickup Date:{" "}
-                {dealData?.pickupDate
-                  ? new Date(dealData.pickupDate).toLocaleDateString()
-                  : ""}
-              </p>
-              <p>Agreed Price: {dealData?.agreedPrice}</p>
-              <p>Deposit: {dealData?.deposit}</p>
-              <p>Balance: {dealData?.balance}</p>
-              <p>Finance: {dealData?.finance ? "Yes" : "No"}</p>
-              <p>
-                Finance Status:{" "}
-                {convertScreamingSnakeToDisplayCase(dealData?.financeStatus)}
-              </p>
-              <p>Finance Amount: {dealData?.financeAmount}</p>
+              <div
+                className={
+                  generalStyles["form-grid"] +
+                  " " +
+                  styles["deal-detail-container"]
+                }
+              >
+                <p>Status: {dealData?.status}</p>
+                <p>
+                  Deal Date:{" "}
+                  {dealData?.dealDate
+                    ? new Date(dealData.dealDate).toLocaleDateString()
+                    : ""}
+                </p>
+                <p>
+                  Pickup Date:{" "}
+                  {dealData?.pickupDate
+                    ? new Date(dealData.pickupDate).toLocaleDateString()
+                    : ""}
+                </p>
+                <p>
+                  Agreed Price: {formatNumberToPrice(dealData?.agreedPrice)}
+                </p>
+                <p>Deposit: {formatNumberToPrice(dealData?.deposit)}</p>
+                <p>Balance: {formatNumberToPrice(dealData?.balance)}</p>
+                <p>Finance: {dealData?.finance ? "Yes" : "No"}</p>
+                <p>
+                  Finance Status:{" "}
+                  {convertScreamingSnakeToDisplayCase(dealData?.financeStatus)}
+                </p>
+                <p>
+                  Finance Amount: {formatNumberToPrice(dealData?.financeAmount)}
+                </p>
+              </div>
             </div>
             <button
               onClick={() => setEditMode(true)}
