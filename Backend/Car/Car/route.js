@@ -222,4 +222,43 @@ router.delete("/:id", async (req, res) => {
     console.error("Error deleting car:", error);
   }
 });
+
+router.get("/car/makeModelOption", async (req, res) => {
+  try {
+    // Fetch all cars from database
+    const cars = await prisma.car.findMany({
+      select: {
+        make: true,
+        model: true,
+      },
+      distinct: ["make", "model"],
+    });
+
+    // Group models by make
+    const makeModelMap = {};
+    cars.forEach((car) => {
+      if (!makeModelMap[car.make]) {
+        makeModelMap[car.make] = new Set();
+      }
+      makeModelMap[car.make].add(car.model);
+    });
+
+    // Convert to the desired format
+    const result = Object.keys(makeModelMap)
+      .map((make) => ({
+        make: make,
+        models: Array.from(makeModelMap[make]).sort(), // Sort models alphabetically
+      }))
+      .sort((a, b) => a.make.localeCompare(b.make)); // Sort makes alphabetically
+
+    res.json(result);
+  } catch (error) {
+    console.error("Error fetching make/model options:", error.message);
+    res.status(500).json({
+      error: "Failed to fetch make/model options",
+      message: error.message,
+    });
+  }
+});
+
 export default router;

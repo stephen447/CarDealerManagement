@@ -19,7 +19,8 @@ router.post("/", async (req, res) => {
       finance,
       financeStatus,
       financeAmount,
-      customerName,
+      customerFirstName,
+      customerLastName,
       customerEmail,
       customerNumber,
     } = req.body;
@@ -34,7 +35,8 @@ router.post("/", async (req, res) => {
       !dealDate ||
       deposit === undefined ||
       balance === undefined ||
-      !customerName ||
+      !customerFirstName ||
+      !customerLastName ||
       !customerEmail ||
       !customerNumber
     ) {
@@ -49,7 +51,8 @@ router.post("/", async (req, res) => {
           "dealDate",
           "deposit",
           "balance",
-          "customerName",
+          "customerFirstName",
+          "customerLastName",
           "customerEmail",
           "customerNumber",
         ],
@@ -60,6 +63,7 @@ router.post("/", async (req, res) => {
     agreedPrice = Number(agreedPrice);
     deposit = Number(deposit);
     balance = Number(balance);
+    finance = Boolean(finance);
     if (financeAmount !== undefined) {
       financeAmount = Number(financeAmount);
     }
@@ -112,6 +116,7 @@ router.post("/", async (req, res) => {
       });
     }
 
+    let normalizedFinanceStatus;
     // Validate financeStatus enum if provided
     if (financeStatus !== undefined) {
       const validFinanceStatuses = [
@@ -122,7 +127,7 @@ router.post("/", async (req, res) => {
         "AWAITING_PAYMENT",
         "PAID",
       ];
-      let normalizedFinanceStatus = String(financeStatus)
+      normalizedFinanceStatus = String(financeStatus)
         .split("_")
         .map(
           (word) => word.charAt(0).toUpperCase() + word.slice(1).toUpperCase()
@@ -210,7 +215,8 @@ router.post("/", async (req, res) => {
         finance: finance || false,
         financeStatus: financeStatus ? normalizedFinanceStatus : null,
         financeAmount: financeAmount || null,
-        customerName,
+        customerFirstName,
+        customerLastName,
         customerEmail,
         customerNumber,
       },
@@ -373,6 +379,10 @@ router.put("/:id", async (req, res) => {
           error: "Invalid agreedPrice. Must be a positive number",
         });
       }
+    }
+
+    if (data.finance !== undefined) {
+      data.finance = Boolean(data.finance);
     }
 
     if (data.deposit !== undefined) {
