@@ -1,0 +1,8 @@
+.selected-value {
+  padding: 0.5rem;
+  background-color: var(--color-gray-200);
+  border-radius: var(--border-radius-small);
+  min-height: 2.5rem;
+  display: flex;
+  align-items: center;
+}
