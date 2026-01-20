@@ -1,4 +1,4 @@
-import styles from "./ButtonWithModal.module.css";
+import styles from "./DeleteButton.module.css";
 import { useState } from "react";
 import axiosInstance from "../../Other/AxiosInstance";
 import { useNavigate } from "react-router-dom";
@@ -6,7 +6,7 @@ import Loader from "../Loader/Loader";
 import Warning from "../Warning/Warning";
 import generalStyles from "../../Other/GeneralStyles.module.css";
 
-function DeleteButton({ item, url }) {
+function DeleteButton({ item, url, redirectUrl }) {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [error, setError] = useState(null);
@@ -19,10 +19,10 @@ function DeleteButton({ item, url }) {
   async function handleConfirm() {
     try {
       setLoading(true);
-      await axiosInstance.delete("http://localhost:30001/" + url);
+      await axiosInstance.delete("http://localhost:3000/" + url);
       setIsModalOpen(false);
       setError(null);
-      navigate("/dealer/deals");
+      navigate(redirectUrl);
     } catch (error) {
       console.error(error);
       setError(`Error deleting ${item} record`);
