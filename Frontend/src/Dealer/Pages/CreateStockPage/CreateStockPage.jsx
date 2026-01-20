@@ -3,7 +3,7 @@ import SidebarNav from "../../../General/SideBarNav/SideBarNav";
 import DealerNavLinks from "../../../General/Other/DealerNavLinks";
 import TextInput from "../../../General/Component/TextInput/TextInput";
 import SelectInput from "../../../General/Component/SelectInput/SelectInput";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import generalStyles from "../../../General/Other/GeneralStyles.module.css";
 import axiosInstance from "../../../General/Other/AxiosInstance";
 import { formatRegistration } from "../../../General/Other/GeneralFunctions";
@@ -28,6 +28,54 @@ function CreateStockPage() {
     type: "",
   };
   const [formData, setFormData] = useState(emptyFormData);
+  const [manufacturerOptions, setManufacturerOptions] = useState([]);
+  const [carOptions, setCarOptions] = useState([]);
+  const [modelOptions, setModelOptions] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("/CarOptions.json");
+        const data = await response.json();
+
+        setCarOptions(data);
+
+        const manufacturerOptions = data
+          .map((car) => ({
+            value: car.brand,
+            label: car.brand,
+          }))
+          .sort((a, b) => a.label.localeCompare(b.label));
+
+        setManufacturerOptions(manufacturerOptions);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const selectedCar = carOptions.find((car) => car.brand === formData.make);
+
+    if (!selectedCar) return;
+
+    // Format the models for the select input
+    const modelOptions = selectedCar.models.map((model) => ({
+      value: model,
+      label: model,
+    }));
+
+    // Set the model options for the newly selected make
+    setModelOptions(modelOptions);
+
+    //Set the first model as the default of newly selected make
+    setFormData((prev) => ({
+      ...prev,
+      model: modelOptions[0]?.value ?? "",
+    }));
+  }, [formData.make, carOptions]);
 
   const statusOptions = [
     { value: "DUE_IN", label: "Due In" },
@@ -96,19 +144,21 @@ function CreateStockPage() {
         <div className={generalStyles["content-container"]}>
           <h1>Create Stock</h1>
           <form onSubmit={handleSubmit} className={generalStyles["form-grid"]}>
-            <TextInput
+            <SelectInput
               label="Make"
               name="make"
               type="text"
               formData={formData}
               setFormData={setFormData}
+              options={manufacturerOptions}
             />
-            <TextInput
+            <SelectInput
               label="Model"
               name="model"
               type="text"
               formData={formData}
               setFormData={setFormData}
+              options={modelOptions}
             />
             <TextInput
               label="Year"
