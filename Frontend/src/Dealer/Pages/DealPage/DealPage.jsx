@@ -15,7 +15,7 @@ import {
   formatRegistration,
   formatNumberToPrice,
 } from "../../../General/Other/GeneralFunctions";
-import DeleteButton from "../../../General/Component/ButtonWithModal/ButtonWithModal";
+import DeleteButton from "../../../General/Component/DeleteButton/DeleteButton";
 
 function DealPage() {
   const { id } = useParams();
@@ -315,7 +315,11 @@ function DealPage() {
             >
               {updateLoading ? <Loader size={16} /> : "Save"}
             </button>
-            <DeleteButton item="Deal" url={`api/v1/deal/${id}`} />
+            <DeleteButton
+              item="Deal"
+              url={`api/v1/deal/${id}`}
+              redirectUrl={"/dealer/deals"}
+            />
           </div>
         ) : (
           <div className={generalStyles["content-container"]}>

@@ -8,6 +8,7 @@ import TextInput from "../../../General/Component/TextInput/TextInput";
 import axiosInstance from "../../../General/Other/AxiosInstance";
 import Loader from "../../../General/Component/Loader/Loader";
 import Warning from "../../../General/Component/Warning/Warning";
+import DeleteButton from "../../../General/Component/DeleteButton/DeleteButton";
 
 function SalesPersonPage() {
   const { id } = useParams();
@@ -127,6 +128,11 @@ function SalesPersonPage() {
                   >
                     Save
                   </button>
+                  <DeleteButton
+                    item="salesperson"
+                    url={`api/v1/user/${id}`}
+                    redirectUrl="/dealer/salesPersonList"
+                  />
                 </div>
                 {updateWarning && <Warning message={updateWarning} />}
               </>
