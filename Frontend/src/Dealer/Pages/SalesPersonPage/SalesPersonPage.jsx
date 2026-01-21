@@ -128,12 +128,12 @@ function SalesPersonPage() {
                   >
                     Save
                   </button>
-                  <DeleteButton
-                    item="salesperson"
-                    url={`api/v1/user/${id}`}
-                    redirectUrl="/dealer/salesPersonList"
-                  />
                 </div>
+                <DeleteButton
+                  item="salesperson"
+                  url={`api/v1/user/${id}`}
+                  redirectUrl="/dealer/salesPersonList"
+                />
                 {updateWarning && <Warning message={updateWarning} />}
               </>
             )}

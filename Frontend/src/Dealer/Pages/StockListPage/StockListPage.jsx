@@ -8,10 +8,11 @@ import axiosInstance from "../../../General/Other/AxiosInstance";
 import Warning from "../../../General/Component/Warning/Warning";
 import Loader from "../../../General/Component/Loader/Loader";
 import SelectInput from "../../../General/Component/SelectInput/SelectInput";
-import { formatRegistration } from "../../../General/Other/GeneralFunctions";
+import { useNavigate } from "react-router-dom";
 
 function StockListPage() {
   const navLinks = DealerNavLinks.stock;
+  const navigate = useNavigate();
   const [stockData, setStockData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [warning, setWarning] = useState("");
@@ -89,22 +90,35 @@ function StockListPage() {
         <SidebarNav items={navLinks} />
         <div className={generalStyles["content-container"]}>
           <h1>Stock List</h1>
-          <SelectInput
-            label="Sort by"
-            name="sortBy"
-            value={sortBy}
-            setFormData={setSortBy}
-            formData={sortBy}
-            options={sortOptions}
-          />
           {loading ? (
             <Loader />
           ) : warning ? (
             <Warning message={warning} />
+          ) : stockData.length === 0 ? (
+            <>
+              <h2>No Stock Found</h2>
+              <button
+                onClick={() => navigate("/dealer/createStock")}
+                className={generalStyles["button-primary"]}
+              >
+                Create Stock
+              </button>
+            </>
           ) : (
-            sortedStockData.map((item) => (
-              <StockListItem key={item.id} item={item} />
-            ))
+            <>
+              <SelectInput
+                label="Sort by"
+                name="sortBy"
+                value={sortBy}
+                setFormData={setSortBy}
+                formData={sortBy}
+                options={sortOptions}
+              />
+
+              {sortedStockData.map((item) => (
+                <StockListItem key={item.id} item={item} />
+              ))}
+            </>
           )}
         </div>
       </main>

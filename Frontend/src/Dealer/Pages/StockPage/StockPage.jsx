@@ -15,6 +15,7 @@ import {
 import axiosInstance from "../../../General/Other/AxiosInstance";
 import Warning from "../../../General/Component/Warning/Warning";
 import Loader from "../../../General/Component/Loader/Loader";
+import DeleteButton from "../../../General/Component/DeleteButton/DeleteButton";
 
 function StockPage() {
   const { id } = useParams();
@@ -243,9 +244,6 @@ function StockPage() {
                   >
                     Edit
                   </button>
-                  <button className={generalStyles["button-primary"]}>
-                    Delete
-                  </button>
                 </div>
               </div>
             </div>
@@ -368,6 +366,11 @@ function StockPage() {
                 Save
               </button>
             </div>
+            <DeleteButton
+              item="stock"
+              url={"api/v1/car/" + id}
+              redirectUrl="/dealer/stock"
+            />
           </div>
         </main>
       )}
