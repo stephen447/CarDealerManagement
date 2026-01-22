@@ -7,8 +7,12 @@ import { useState, useEffect } from "react";
 import generalStyles from "../../../General/Other/GeneralStyles.module.css";
 import axiosInstance from "../../../General/Other/AxiosInstance";
 import { formatRegistration } from "../../../General/Other/GeneralFunctions";
+import Loader from "../../../General/Component/Loader/Loader";
+import Warning from "../../../General/Component/Warning/Warning";
+import { useNavigate } from "react-router-dom";
 
 function CreateStockPage() {
+  const navigate = useNavigate();
   const emptyFormData = {
     make: "",
     model: "",
@@ -31,6 +35,8 @@ function CreateStockPage() {
   const [manufacturerOptions, setManufacturerOptions] = useState([]);
   const [carOptions, setCarOptions] = useState([]);
   const [modelOptions, setModelOptions] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -50,6 +56,7 @@ function CreateStockPage() {
         setManufacturerOptions(manufacturerOptions);
       } catch (error) {
         console.error("Error fetching data:", error);
+        setError("Error fetching vehicle Options");
       }
     };
 
@@ -124,17 +131,24 @@ function CreateStockPage() {
     { value: "USED", label: "Used" },
   ];
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
+    setLoading(true);
     e.preventDefault();
     setFormData({
       ...formData,
       registration: formatRegistration(formData?.registration),
     });
-    axiosInstance.post("/api/v1/car", formData);
-    setFormData(emptyFormData);
+    try {
+      const response = await axiosInstance.post("/api/v1/car", formData);
+      console.log(response);
+      setFormData(emptyFormData);
+      navigate(`/dealer/stock/${response.data.data.id}`);
+    } catch (error) {
+      console.error("Error creating car:", error);
+      setError("Error creating car");
+    }
+    setLoading(false);
   };
-
-  // Get the options for the select from the db
 
   return (
     <div style={{ height: "100vh" }}>
@@ -143,120 +157,132 @@ function CreateStockPage() {
         <SidebarNav items={DealerNavLinks.stock} />
         <div className={generalStyles["content-container"]}>
           <h1>Create Stock</h1>
-          <form onSubmit={handleSubmit} className={generalStyles["form-grid"]}>
-            <SelectInput
-              label="Make"
-              name="make"
-              type="text"
-              formData={formData}
-              setFormData={setFormData}
-              options={manufacturerOptions}
-            />
-            <SelectInput
-              label="Model"
-              name="model"
-              type="text"
-              formData={formData}
-              setFormData={setFormData}
-              options={modelOptions}
-            />
-            <TextInput
-              label="Year"
-              name="year"
-              type="number"
-              formData={formData}
-              setFormData={setFormData}
-            />
-            <TextInput
-              label="Registration"
-              name="registration"
-              type="text"
-              formData={formData}
-              setFormData={setFormData}
-            />
-            <TextInput
-              label="Price"
-              name="price"
-              type="number"
-              formData={formData}
-              setFormData={setFormData}
-            />
-            <TextInput
-              label="Buy In Date"
-              name="buyInDate"
-              type="date"
-              formData={formData}
-              setFormData={setFormData}
-            />
-            <TextInput
-              label="Description"
-              name="description"
-              type="text"
-              formData={formData}
-              setFormData={setFormData}
-            />
-            <SelectInput
-              label="Status"
-              name="status"
-              options={statusOptions}
-              formData={formData}
-              setFormData={setFormData}
-            />
-            <TextInput
-              label="Engine Size"
-              name="engineSize"
-              type="number"
-              formData={formData}
-              setFormData={setFormData}
-            />
-            <SelectInput
-              label="Engine Type"
-              name="engineType"
-              formData={formData}
-              setFormData={setFormData}
-              options={engineTypeOptions}
-            />
-            <TextInput
-              label="Color"
-              name="color"
-              type="text"
-              formData={formData}
-              setFormData={setFormData}
-            />
-            <TextInput
-              label="Mileage"
-              name="mileage"
-              type="number"
-              formData={formData}
-              setFormData={setFormData}
-            />
-            <SelectInput
-              label="Type"
-              name="type"
-              formData={formData}
-              setFormData={setFormData}
-              options={typeOptions}
-            />
-            <SelectInput
-              label="Transmission"
-              name="transmission"
-              formData={formData}
-              setFormData={setFormData}
-              options={transmissionOptions}
-            />
-            <SelectInput
-              label="Condition"
-              name="condition"
-              options={conditionOptions}
-              formData={formData}
-              setFormData={setFormData}
-            />
-            <div className={generalStyles["form-button-container"]}>
-              <button type="submit" className={generalStyles["button-primary"]}>
-                Create Stock
-              </button>
-            </div>
-          </form>
+          {loading ? (
+            <Loader />
+          ) : error ? (
+            <Warning message={error} />
+          ) : (
+            <form
+              onSubmit={handleSubmit}
+              className={generalStyles["form-grid"]}
+            >
+              <SelectInput
+                label="Make"
+                name="make"
+                type="text"
+                formData={formData}
+                setFormData={setFormData}
+                options={manufacturerOptions}
+              />
+              <SelectInput
+                label="Model"
+                name="model"
+                type="text"
+                formData={formData}
+                setFormData={setFormData}
+                options={modelOptions}
+              />
+              <TextInput
+                label="Year"
+                name="year"
+                type="number"
+                formData={formData}
+                setFormData={setFormData}
+              />
+              <TextInput
+                label="Registration"
+                name="registration"
+                type="text"
+                formData={formData}
+                setFormData={setFormData}
+              />
+              <TextInput
+                label="Price"
+                name="price"
+                type="number"
+                formData={formData}
+                setFormData={setFormData}
+              />
+              <TextInput
+                label="Buy In Date"
+                name="buyInDate"
+                type="date"
+                formData={formData}
+                setFormData={setFormData}
+              />
+              <TextInput
+                label="Description"
+                name="description"
+                type="text"
+                formData={formData}
+                setFormData={setFormData}
+              />
+              <SelectInput
+                label="Status"
+                name="status"
+                options={statusOptions}
+                formData={formData}
+                setFormData={setFormData}
+              />
+              <TextInput
+                label="Engine Size"
+                name="engineSize"
+                type="number"
+                formData={formData}
+                setFormData={setFormData}
+              />
+              <SelectInput
+                label="Engine Type"
+                name="engineType"
+                formData={formData}
+                setFormData={setFormData}
+                options={engineTypeOptions}
+              />
+              <TextInput
+                label="Color"
+                name="color"
+                type="text"
+                formData={formData}
+                setFormData={setFormData}
+              />
+              <TextInput
+                label="Mileage"
+                name="mileage"
+                type="number"
+                formData={formData}
+                setFormData={setFormData}
+              />
+              <SelectInput
+                label="Type"
+                name="type"
+                formData={formData}
+                setFormData={setFormData}
+                options={typeOptions}
+              />
+              <SelectInput
+                label="Transmission"
+                name="transmission"
+                formData={formData}
+                setFormData={setFormData}
+                options={transmissionOptions}
+              />
+              <SelectInput
+                label="Condition"
+                name="condition"
+                options={conditionOptions}
+                formData={formData}
+                setFormData={setFormData}
+              />
+              <div className={generalStyles["form-button-container"]}>
+                <button
+                  type="submit"
+                  className={generalStyles["button-primary"]}
+                >
+                  Create Stock
+                </button>
+              </div>
+            </form>
+          )}
         </div>
       </main>
     </div>

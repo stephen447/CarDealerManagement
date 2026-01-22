@@ -366,11 +366,13 @@ function StockPage() {
                 Save
               </button>
             </div>
-            <DeleteButton
-              item="stock"
-              url={"api/v1/car/" + id}
-              redirectUrl="/dealer/stock"
-            />
+            <div className={generalStyles["form-button-container"]}>
+              <DeleteButton
+                item="stock"
+                url={"api/v1/car/" + id}
+                redirectUrl="/dealer/stock"
+              />
+            </div>
           </div>
         </main>
       )}
