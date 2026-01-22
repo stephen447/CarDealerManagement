@@ -29,7 +29,6 @@ function DealsListPage() {
     }
     apiCall();
   }, []);
-  //
 
   return (
     <div style={{ height: "100vh" }}>
@@ -48,9 +47,17 @@ function DealsListPage() {
           <div className={generalStyles["content-container"]}>
             <h1>Deals List Page</h1>
             <div className={generalStyles["form-grid"]}>
-              {dealsData.map((deal) => (
-                <DealListItem deal={deal} />
-              ))}
+              {dealsData.length === 0 ? (
+                <h2 className={generalStyles["form-button-container"]}>
+                  No Deals Found
+                </h2>
+              ) : (
+                <>
+                  {dealsData.map((deal) => (
+                    <DealListItem deal={deal} />
+                  ))}
+                </>
+              )}
             </div>
           </div>
         )}
