@@ -421,6 +421,7 @@ function DealPage() {
         setData={setDealData}
         displayFields={["make", "model", "year", "registration"]}
         searchFields={["make", "model"]}
+        updatedObject="car"
       />
 
       <RecordSelectorModal
@@ -433,6 +434,7 @@ function DealPage() {
         setData={setDealData}
         displayFields={["firstName", "lastName"]}
         searchFields={["firstName", "lastName"]}
+        updatedObject="salesperson"
       />
     </div>
   );

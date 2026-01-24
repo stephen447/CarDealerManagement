@@ -14,6 +14,7 @@ function RecordSelectorModal({
   data,
   setData,
   title,
+  updatedObject,
 }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [records, setRecords] = useState([]);
@@ -49,11 +50,17 @@ function RecordSelectorModal({
   if (!isOpen) return null;
 
   const handleRecordSelect = (record) => {
-    console.log(record, name, data);
+    console.log(record, name, data, updatedObject);
     setData({
       ...data,
       [name]: record["id"],
     });
+    if (updatedObject) {
+      setData({
+        ...data,
+        [updatedObject]: record,
+      });
+    }
     onClose();
   };
 
