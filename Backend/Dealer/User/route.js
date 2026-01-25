@@ -6,7 +6,8 @@ const router = express.Router();
 // POST /api/v1/user - Create a new user (salesperson/admin)
 router.post("/", async (req, res) => {
   try {
-    let { firstName, lastName, email, password, role, dealerId } = req.body;
+    let { firstName, lastName, email, password, role, dealerId, phone } =
+      req.body;
 
     // Validate required fields
     if (!firstName || !lastName || !email || !password || !role || !dealerId) {
@@ -62,6 +63,7 @@ router.post("/", async (req, res) => {
         firstName,
         lastName,
         email,
+        phone,
         password,
         role,
         dealerId,
@@ -120,7 +122,6 @@ router.get("/:id", async (req, res) => {
       where: { id },
       include: {
         dealer: true,
-        deal: true,
       },
     });
 
@@ -140,6 +141,8 @@ router.get("/:id", async (req, res) => {
     });
   }
 });
+
+// Get salespeople for a given dealer - get dealer from the
 
 // PUT /api/v1/user/:id - Update a user by id
 router.put("/:id", async (req, res) => {
@@ -168,6 +171,8 @@ router.put("/:id", async (req, res) => {
         });
       }
     }
+
+    // Valiate Phone Number - need to decide the format I want to support
 
     if (data.dealerId) {
       const dealer = await prisma.dealer.findUnique({
