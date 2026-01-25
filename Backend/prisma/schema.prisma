@@ -1,8 +1,5 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+// Prisma schema
+// https://pris.ly/d/prisma-schema
 
 generator client {
   provider = "prisma-client-js"
@@ -12,149 +9,217 @@ datasource db {
   provider = "postgresql"
 }
 
+/* =========================
+   MODELS
+   ========================= */
+
 model Dealer {
   id        String   @id @default(uuid())
   name      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
-  users     User[]
-  car     Car[]
-  deal Deal[]
+  location  String?
+  phone     String?
+  email     String?
 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  users User[]
+  cars  Car[]
+  deals Deal[]
 }
 
-// ToDo: Add 'Manager' role
 model User {
   id        String   @id @default(uuid())
   firstName String
   lastName  String
   email     String   @unique
+  phone     String?
   password  String
   role      Role
+
   dealerId  String
-  dealer    Dealer   @relation(fields: [dealerId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
-  deal Deal[]
-
-}
-
-model Car {
-  id        String   @id @default(uuid())
-  make      String
-  model     String
-  year      Int
-  description String?
-  registration String?
-  price     Int
-  dealerId  String
-  dealer    Dealer   @relation(fields: [dealerId], references: [id])
-  buyInDate DateTime @default(now())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
-  condition CarCondition @default(USED)
-  type      CarType @default(RETAIL)
-  status    CarStatus @default(DUE_IN)
-  engineSize Int?
-  engineType String?
-  transmission String?
-  mileage Int?
-  color String?
-  deal Deal[]
-}
-
-model Deal {
-  id             String        @id @default(uuid())
-
-  // Relations
-  carId          String
-  car            Car           @relation(fields: [carId], references: [id])
-
-  // customerId     String
-  // customer       Customer      @relation(fields: [customerId], references: [id])
-
-  dealerId       String
-  dealer         Dealer        @relation(fields: [dealerId], references: [id])
-
-  salespersonId  String
-  salesperson    User          @relation(fields: [salespersonId], references: [id])
-
-  // Deal info
-  agreedPrice    Int
-  status         DealStatus
-  pickupDate     DateTime?
-  dealDate       DateTime
-  deposit        Int
-  balance        Int
-
-  // Finance
-  finance        Boolean       @default(false)
-  financeStatus  FinanceStatus?
-  financeAmount  Int?
-
-  // Metadata
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
-
-  // Customer
-  customerFirstName   String
-  customerLastName  String
-  customerEmail String
-  customerNumber String
-
-  @@index([dealerId])
-  @@index([carId])
-  //@@index([customerId])
-}
-
-//Redundant for the minute
-model Customer {
-  id        String   @id @default(uuid())
-
-  first_name      String
-  last_name     String
-  phone     String
-  email     String
+  dealer    Dealer  @relation(fields: [dealerId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  // Relations
+  deals Deal[]
 }
 
+model Car {
+  id           String   @id @default(uuid())
+  make         String
+  model        String
+  year         Int
+  price        Int
+  mileage      Int      @default(0)
+  owners       Int      @default(0)
+
+  description  String?
+  dealerNotes  String?
+  registration String?
+  recon        String?
+
+  engineSize   Int?
+  engineType   EngineType?
+  transmission TransmissionType @default(AUTOMATIC)
+  color        ColorOptions?
+
+  condition    CarCondition   @default(NEW)
+  type         CarType        @default(RETAIL)
+  status       CarStatus      @default(DUE_IN)
+
+  buyInDate    DateTime?
+  buyInPrice   Int?
+  saleDate     DateTime?
+  salePrice    Int?
+
+  pictures     String[]
+  video        String?
+
+  dealerId     String
+  dealer       Dealer   @relation(fields: [dealerId], references: [id])
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Relations
+  car Deal[] @relation("Car")
+  tradeIn Deal[] @relation("TradeIn")
+}
+
+model Deal {
+  id String @id @default(uuid())
+
+  /* Relations */
+  dealerId      String
+  dealer        Dealer @relation(fields: [dealerId], references: [id])
+
+  carId         String
+  car           Car    @relation("Car", fields: [carId], references: [id])
+
+  salespersonId String
+  salesperson   User   @relation(fields: [salespersonId], references: [id])
+
+  tradeInId     String?
+  tradeIn       Car?   @relation("TradeIn", fields: [tradeInId], references: [id])
+
+  /* Deal info */
+  agreedPrice   Int 
+  status        DealStatus 
+  dealDate      DateTime @default(now())
+  pickupDate    DateTime?
+  deposit       Int
+  balance       Int
+  tradeInAllowance Int?
+
+  /* Finance */
+  finance        Boolean       @default(false)
+  financeStatus  FinanceStatus? @default(NOT_APPLIED)
+  financeAmount  Int? @default(0)
+  financeTerm    Int? @default(0)
+  financeRate    Int? @default(0)
+
+  /* Customer */
+  customerFirstName String
+  customerLastName  String
+  customerEmail     String
+  customerNumber    String
+
+  /* Add-ons */
+  gap                   Boolean @default(false)
+  gapAmount             Int? @default(0)
+
+  paintProtection       Boolean @default(false)
+  paintProtectionAmount Int? @default(0)
+
+  servicePlan           Boolean @default(false)
+  servicePlanAmount     Int? @default(0)
+
+  extendedWarranty       Boolean @default(false)
+  extendedWarrantyAmount Int? @default(0)
+
+  /* Metadata */
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([dealerId])
+  @@index([carId])
+}
+
+/* =========================
+   ENUMS
+   ========================= */
+
 enum Role {
-  ADMIN
+  APPLICATION_ADMIN
+  DEALER_ADMIN
+  SALES_MANAGER
   SALESPERSON
 }
 
 enum DealStatus {
-  PENDING
-  Declined
-  AGREED
+  AWAITING_PAYMENT
+  AWAITING_PICKUP
   CANCELLED
-  COMPLETED
+  COLLECTED
+  RETURNED
 }
 
 enum FinanceStatus {
   NOT_APPLIED
   AWAITING_APPROVAL
   APPROVED
-  PENDING
+  DECLINED
   AWAITING_PAYMENT
   PAID
 }
 
-enum CarStatus{
+enum CarStatus {
   DUE_IN
   IN_PREP
   ON_SALE
   SOLD
 }
 
-enum CarCondition{
+enum CarCondition {
   NEW
   USED
 }
 
-enum CarType{
+enum CarType {
   RETAIL
   TRADE
+}
+
+enum ColorOptions {
+  BLACK
+  BLUE
+  BROWN
+  GOLD
+  GREEN
+  GREY
+  ORANGE
+  PINK
+  PURPLE
+  RED
+  SILVER
+  WHITE
+  YELLOW
+}
+
+enum EngineType {
+  PETROL
+  DIESEL
+  ELECTRIC
+  PETROL_HYBRID
+  DIESEL_HYBRID
+}
+
+enum TransmissionType {
+  MANUAL
+  AUTOMATIC
+  SEMI_AUTOMATIC
 }
