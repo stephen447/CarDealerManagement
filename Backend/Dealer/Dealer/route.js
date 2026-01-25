@@ -6,13 +6,13 @@ const router = express.Router();
 // POST /api/v1/dealer - Create a new dealer
 router.post("/", async (req, res) => {
   try {
-    let { name } = req.body;
+    let { name, location, phone, email } = req.body;
 
     // Validate required fields
-    if (!name) {
+    if (!name || !location || !phone || !email) {
       return res.status(400).json({
         error: "Missing required fields",
-        required: ["name"],
+        required: ["name", "location", "phone", "email"],
       });
     }
     // Check if dealer already exists
@@ -26,6 +26,9 @@ router.post("/", async (req, res) => {
     const dealerRecord = await prisma.dealer.create({
       data: {
         name,
+        location,
+        phone,
+        email,
       },
     });
 
