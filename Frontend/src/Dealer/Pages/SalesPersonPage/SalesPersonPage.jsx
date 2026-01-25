@@ -31,11 +31,13 @@ function SalesPersonPage() {
           firstName: response.data.firstName,
           lastName: response.data.lastName,
           email: response.data.email,
+          phone: response.data.phone,
         });
         setTempSalesPerson({
           firstName: response.data.firstName,
           lastName: response.data.lastName,
           email: response.data.email,
+          phone: response.data.phone,
         });
         setLoading(false);
       } catch (error) {
@@ -54,11 +56,11 @@ function SalesPersonPage() {
         `/api/v1/user/${id}`,
         tempSalesPerson
       );
-      console.log(response.data);
       setSalesPerson({
         firstName: response.data.firstName,
         lastName: response.data.lastName,
         email: response.data.email,
+        phone: response.data.phone,
       });
       setUpdateLoading(false);
       setEditMode(false);
@@ -114,6 +116,13 @@ function SalesPersonPage() {
                   formData={tempSalesPerson}
                   setFormData={setTempSalesPerson}
                 />
+                <TextInput
+                  label="Phone"
+                  name="phone"
+                  type="text"
+                  formData={tempSalesPerson}
+                  setFormData={setTempSalesPerson}
+                />
 
                 <div className={styles["button-container"]}>
                   <button
@@ -143,6 +152,7 @@ function SalesPersonPage() {
             <p>First Name: {salesPerson.firstName}</p>
             <p>Last Name: {salesPerson.lastName}</p>
             <p>Email: {salesPerson.email}</p>
+            {salesPerson.phone && <p>Phone: {salesPerson.phone}</p>}
             <div className={styles["button-container"]}>
               <button
                 onClick={() => setEditMode(true)}

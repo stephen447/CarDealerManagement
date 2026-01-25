@@ -14,6 +14,7 @@ function CreateSalesPersonPage() {
     lastName: "",
     email: "",
     password: "",
+    phone: "",
     role: "SALESPERSON",
     dealerId: "1234",
   });
@@ -32,13 +33,14 @@ function CreateSalesPersonPage() {
     setLoading(true);
 
     try {
-      const response = await axiosInstance.post("/api/v1/user", formData);
+      await axiosInstance.post("/api/v1/user", formData);
       // Optional: reset form
       setFormData({
         firstName: "",
         lastName: "",
         email: "",
         password: "",
+        phone: "",
         role: "SALESPERSON",
         dealerId: "1234",
       });
@@ -77,6 +79,13 @@ function CreateSalesPersonPage() {
               label={"Email"}
               name="email"
               type={"email"}
+              formData={formData}
+              setFormData={setFormData}
+            />
+            <TextInput
+              label="Phone"
+              name="phone"
+              type="text"
               formData={formData}
               setFormData={setFormData}
             />
