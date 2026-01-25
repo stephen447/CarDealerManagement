@@ -16,7 +16,7 @@ datasource db {
 model Dealer {
   id        String   @id @default(uuid())
   name      String
-  location  String?
+  location  String
   phone     String?
   email     String?
 
@@ -63,16 +63,16 @@ model Car {
   recon        String?
 
   engineSize   Int?
-  engineType   EngineType?
+  engineType   EngineType
   transmission TransmissionType @default(AUTOMATIC)
-  color        ColorOptions?
+  color        ColorOptions
 
   condition    CarCondition   @default(NEW)
   type         CarType        @default(RETAIL)
   status       CarStatus      @default(DUE_IN)
 
   buyInDate    DateTime?
-  buyInPrice   Int?
+  buyInPrice   Int
   saleDate     DateTime?
   salePrice    Int?
 
