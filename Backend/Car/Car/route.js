@@ -2,262 +2,273 @@ import express from "express";
 import prisma from "../../lib/prisma.js";
 
 const router = express.Router();
+const toNumber = (value, fallback = null) => {
+  const n = Number(value);
+  return Number.isNaN(n) ? fallback : n;
+};
 
-// POST /api/v1/car - Create a new car
+const toDate = (value) => {
+  if (!value) return null;
+  const d = new Date(value);
+  return Number.isNaN(d.getTime()) ? null : d;
+};
+
+const filterUndefined = (obj) =>
+  Object.fromEntries(
+    Object.entries(obj).filter(
+      ([, value]) => value !== undefined && value !== null
+    )
+  );
+
+const REQUIRED_FIELDS = [
+  "buyInDate",
+  "buyInPrice",
+  "color",
+  "condition",
+  "dealerId",
+  "description",
+  "engineType",
+  "make",
+  "mileage",
+  "model",
+  "price",
+  "status",
+  "transmission",
+  "type",
+  "year",
+];
+
+const validateRequiredFields = (body) => {
+  const missing = REQUIRED_FIELDS.filter((field) => !body[field]);
+  return missing.length ? missing : null;
+};
+
+const validateYear = (year) => {
+  const maxYear = new Date().getFullYear() + 1;
+  return year >= 1900 && year <= maxYear;
+};
+
+// POST /api/v1/car
 router.post("/", async (req, res) => {
   try {
-    let {
-      make,
-      model,
-      year,
-      description,
-      registration,
-      price,
-      dealerId,
-      engineSize,
-      engineType,
-      transmission,
-      mileage,
-      buyInDate,
-      status,
-      condition,
-      type,
-      color,
-    } = req.body;
-
-    // Validate required fields
-    if (
-      !make ||
-      !model ||
-      !year ||
-      !description ||
-      !registration ||
-      !price ||
-      !dealerId ||
-      !engineSize ||
-      !engineType ||
-      !transmission ||
-      !mileage ||
-      !buyInDate ||
-      !status ||
-      !condition ||
-      !type ||
-      !color
-    ) {
+    const missingFields = validateRequiredFields(req.body);
+    if (missingFields) {
       return res.status(400).json({
         error: "Missing required fields",
-        required: [
-          "make",
-          "model",
-          "year",
-          "description",
-          "registration",
-          "price",
-          "dealerId",
-          "engineSize",
-          "engineType",
-          "transmission",
-          "mileage",
-          "buyInDate",
-          "status",
-          "condition",
-          "type",
-          "color",
-        ],
+        required: missingFields,
       });
     }
 
-    // Convert year and price to number
-    year = Number(year);
-    price = Number(price);
-    engineSize = Number(engineSize);
-    mileage = Number(mileage);
-    buyInDate = new Date(req.body.buyInDate);
+    let {
+      buyInDate,
+      buyInPrice,
+      color,
+      condition,
+      dealerId,
+      dealerNotes,
+      description,
+      engineSize,
+      engineType,
+      make,
+      mileage,
+      model,
+      owners,
+      pictures,
+      price,
+      recon,
+      registration,
+      saleDate,
+      salePrice,
+      status,
+      transmission,
+      type,
+      video,
+      year,
+    } = req.body;
 
-    // Validate year is a number
-    if (
-      typeof year !== "number" ||
-      year < 1900 ||
-      year > new Date().getFullYear() + 1
-    ) {
-      return res.status(400).json({
-        error:
-          "Invalid year. Must be a number between 1900 and current year + 1",
-      });
+    // Type conversions
+    year = toNumber(year);
+    price = toNumber(price);
+    mileage = toNumber(mileage);
+    engineSize = toNumber(engineSize);
+    owners = toNumber(owners, 0);
+    buyInPrice = toNumber(buyInPrice);
+    salePrice = toNumber(salePrice);
+
+    buyInDate = toDate(buyInDate);
+    saleDate = toDate(saleDate);
+
+    // Validation
+    // Validations to do
+    // Check if the reg car is already in db, with the current dealer and active status
+    // Check if the registration is valid
+    // Buyin Date can be after today
+    // Buyin date cant be after sale date... maybe, what if sold before it comes in?
+    //  Sale price cant be above asking price
+    // Cap engine size to 0->8
+    // Cap owners to 0->99
+    // Cap mileage to 0->999999
+    // Cap price to 0->999999
+    // Cap buyInPrice to 0->999999
+    // Cap salePrice to 0->999999
+    // Cap buyInDate to today
+    // Cap saleDate to today
+    //  If used must have reg, otherwise null
+    // if not electric must have engine size
+    // if electric, cant have engine size
+    // if have sold price, must have sold date and status must be sold
+    // if have buy in price, must have buy in date
+    if (!validateYear(year)) {
+      return res.status(400).json({ error: "Invalid year" });
     }
 
-    // Validate price is a number
-    if (typeof price !== "number" || price < 0) {
-      return res.status(400).json({
-        error: "Invalid price. Must be a positive number",
-      });
+    if (price < 0 || mileage < 0) {
+      return res
+        .status(400)
+        .json({ error: "Price and mileage must be positive numbers" });
     }
 
-    // Validate mileage is a positive number
-    if (typeof mileage !== "number" || mileage < 0) {
-      return res.status(400).json({
-        error: "Invalid mileage. Must be a positive number",
-      });
-    }
-
-    // Check if dealer exists
     const dealer = await prisma.dealer.findUnique({
       where: { id: dealerId },
     });
 
     if (!dealer) {
-      return res.status(404).json({
-        error: "Dealer not found",
-      });
+      return res.status(404).json({ error: "Dealer not found" });
     }
-    // Check if the car is already in db, with the current dealer and active status
 
     const car = await prisma.car.create({
       data: {
-        make,
-        model,
-        year,
-        description,
-        registration,
-        price,
+        buyInDate,
+        buyInPrice,
+        color,
+        condition,
         dealerId,
+        dealerNotes: dealerNotes || null,
+        description,
         engineSize,
         engineType,
-        transmission,
+        make,
         mileage,
-        buyInDate,
+        model,
+        owners,
+        pictures: pictures || [],
+        price,
+        recon: recon || null,
+        registration: registration || null,
+        saleDate,
+        salePrice,
         status,
-        condition,
+        transmission,
         type,
-        color,
+        video: video || null,
+        year,
       },
     });
 
-    res.status(201).json({
-      message: "Car created successfully",
-      data: car,
-    });
+    res.status(201).json({ message: "Car created successfully", data: car });
   } catch (error) {
     console.error("Error creating car:", error);
-    res.status(500).json({
-      error: "Failed to create car",
-      message: error.message,
-    });
+    res.status(500).json({ error: "Failed to create car" });
   }
 });
 
-// GET /api/v1/car - Get all cars
-router.get("/", async (req, res) => {
+// GET /api/v1/car
+router.get("/", async (_, res) => {
   try {
     const cars = await prisma.car.findMany();
     res.json(cars);
   } catch (error) {
-    console.error("Error getting cars:", error);
+    console.error("Error fetching cars:", error);
+    res.status(500).json({ error: "Failed to fetch cars" });
   }
 });
 
-// GET /api/v1/car/:id - Get a car by id
-router.get("/:id", async (req, res) => {
+// GET /api/v1/car/options/make-model
+router.get("/options/make-model", async (_, res) => {
   try {
-    const { id } = req.params;
-    if (!id) {
-      return res.status(400).json({ error: "Car ID is required" });
-    }
-    const car = await prisma.car.findUnique({ where: { id } });
-    res.json(car);
-  } catch (error) {
-    console.error("Error getting car:", error);
-  }
-});
-
-// PUT /api/v1/car/:id - Update a car by id
-router.put("/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    if (!id) {
-      return res.status(400).json({ error: "Car ID is required" });
-    }
-    const formattedData = {
-      ...req.body,
-    };
-    if (req.body.year) {
-      formattedData.year = Number(req.body.year);
-    }
-    if (req.body.price) {
-      formattedData.price = Number(req.body.price);
-    }
-    if (req.body.engineSize) {
-      formattedData.engineSize = Number(req.body.engineSize);
-    }
-    if (req.body.mileage) {
-      formattedData.mileage = Number(req.body.mileage);
-    }
-    if (req.body.buyInDate) {
-      formattedData.buyInDate = new Date(req.body.buyInDate);
-    }
-
-    formattedData.updatedAt = new Date();
-
-    // Allow partial updates
-    const car = await prisma.car.update({ where: { id }, data: formattedData });
-    res.json(car);
-  } catch (error) {
-    console.error("Error updating car:", error.message);
-    res
-      .status(500)
-      .json({ error: "Failed to update car", message: error.message });
-  }
-});
-
-// DELETE /api/v1/car/:id - Delete a car by id
-router.delete("/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    if (!id) {
-      return res.status(400).json({ error: "Car ID is required" });
-    }
-    const car = await prisma.car.delete({ where: { id } });
-    res.json(car);
-  } catch (error) {
-    console.error("Error deleting car:", error);
-  }
-});
-
-router.get("/car/makeModelOption", async (req, res) => {
-  try {
-    // Fetch all cars from database
     const cars = await prisma.car.findMany({
-      select: {
-        make: true,
-        model: true,
-      },
+      select: { make: true, model: true },
       distinct: ["make", "model"],
     });
 
-    // Group models by make
-    const makeModelMap = {};
-    cars.forEach((car) => {
-      if (!makeModelMap[car.make]) {
-        makeModelMap[car.make] = new Set();
-      }
-      makeModelMap[car.make].add(car.model);
+    const map = {};
+    cars.forEach(({ make, model }) => {
+      if (!map[make]) map[make] = new Set();
+      map[make].add(model);
     });
 
-    // Convert to the desired format
-    const result = Object.keys(makeModelMap)
-      .map((make) => ({
-        make: make,
-        models: Array.from(makeModelMap[make]).sort(), // Sort models alphabetically
+    const result = Object.entries(map)
+      .map(([make, models]) => ({
+        make,
+        models: [...models].sort(),
       }))
-      .sort((a, b) => a.make.localeCompare(b.make)); // Sort makes alphabetically
+      .sort((a, b) => a.make.localeCompare(b.make));
 
     res.json(result);
   } catch (error) {
-    console.error("Error fetching make/model options:", error.message);
-    res.status(500).json({
-      error: "Failed to fetch make/model options",
-      message: error.message,
+    console.error("Error fetching make/model options:", error);
+    res.status(500).json({ error: "Failed to fetch make/model options" });
+  }
+});
+
+// GET /api/v1/car/:id
+router.get("/:id", async (req, res) => {
+  try {
+    const car = await prisma.car.findUnique({
+      where: { id: req.params.id },
     });
+    res.json(car);
+  } catch (error) {
+    console.error("Error fetching car:", error);
+    res.status(500).json({ error: "Failed to fetch car" });
+  }
+});
+
+// PUT /api/v1/car/:id
+router.put("/:id", async (req, res) => {
+  try {
+    const data = {
+      ...req.body,
+      buyInDate: toDate(req.body.buyInDate),
+      saleDate: toDate(req.body.saleDate),
+      buyInPrice: toNumber(req.body.buyInPrice),
+      salePrice: toNumber(req.body.salePrice),
+      year: toNumber(req.body.year),
+      price: toNumber(req.body.price),
+      engineSize: toNumber(req.body.engineSize),
+      mileage: toNumber(req.body.mileage),
+      owners: toNumber(req.body.owners, 0),
+      pictures: req.body.pictures || [],
+      dealerNotes: req.body.dealerNotes || null,
+      recon: req.body.recon || null,
+      registration: req.body.registration || null,
+      video: req.body.video || null,
+      updatedAt: new Date(),
+    };
+
+    // Need to do validations for updates aswell
+    const car = await prisma.car.update({
+      where: { id: req.params.id },
+      data: filterUndefined(data),
+    });
+
+    res.json(car);
+  } catch (error) {
+    console.error("Error updating car:", error);
+    res.status(500).json({ error: "Failed to update car" });
+  }
+});
+
+// DELETE /api/v1/car/:id
+router.delete("/:id", async (req, res) => {
+  try {
+    const car = await prisma.car.delete({
+      where: { id: req.params.id },
+    });
+    res.json(car);
+  } catch (error) {
+    console.error("Error deleting car:", error);
+    res.status(500).json({ error: "Failed to delete car" });
   }
 });
 

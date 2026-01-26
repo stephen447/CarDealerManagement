@@ -66,13 +66,13 @@ model Car {
   engineType   EngineType
   transmission TransmissionType @default(AUTOMATIC)
   color        ColorOptions
-
+ 
   condition    CarCondition   @default(NEW)
   type         CarType        @default(RETAIL)
   status       CarStatus      @default(DUE_IN)
 
   buyInDate    DateTime?
-  buyInPrice   Int
+  buyInPrice   Int?
   saleDate     DateTime?
   salePrice    Int?
 
