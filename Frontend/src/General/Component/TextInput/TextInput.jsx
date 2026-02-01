@@ -1,5 +1,12 @@
 import style from "./TextInput.module.css";
-function TextInput({ label, name, type, formData, setFormData }) {
+function TextInput({
+  label,
+  name,
+  type,
+  formData,
+  setFormData,
+  required = true,
+}) {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -12,12 +19,13 @@ function TextInput({ label, name, type, formData, setFormData }) {
     <div className={style["text-input"]}>
       <label>
         {label}
+        {!required && " (Opt)"}
         <input
           type={type}
           name={name}
           value={formData[name]}
           onChange={handleChange}
-          required
+          required={required}
         />
       </label>
     </div>
